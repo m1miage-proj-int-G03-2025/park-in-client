@@ -3,12 +3,9 @@ import React from "react";
 import { Button } from "@nextui-org/button";
 import { Image } from "@nextui-org/image";
 import { auth } from "../../../../../firebaseConfig";
-import { useAuth } from "@/app/providers/AuthProvider";
 import { GoogleAuthProvider, signInWithPopup } from "firebase/auth";
 
 export default function SignInWithGoogle() {
-    const { user } = useAuth();
-
     const handleLogin = async () => {
         const provider = new GoogleAuthProvider();
         try {
@@ -26,12 +23,9 @@ export default function SignInWithGoogle() {
                     variant="bordered" 
                     size="lg"
                     onPress={handleLogin}
-                    startContent={<Image src="https://fonts.gstatic.com/s/i/productlogos/googleg/v6/24px.svg"/>}>
+                    startContent={<Image alt="google logo" src="https://fonts.gstatic.com/s/i/productlogos/googleg/v6/24px.svg"/>}>
                         Se connecter avec Google
                 </Button>
-            </div>
-            <div>
-                
             </div>
         </div>
     );

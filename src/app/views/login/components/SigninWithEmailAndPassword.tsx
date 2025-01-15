@@ -54,6 +54,7 @@ export default function SignInWithEmailAndPassword() {
                         endContent={
                             <Image 
                                 className="cursor-pointer"
+                                alt="password visibility"
                                 src={isPasswordVisible ? "/eye.png": "/eyeoff.png"} 
                                 width={24} 
                                 onClick={() => setIsPasswordVisible(!isPasswordVisible)}/>
