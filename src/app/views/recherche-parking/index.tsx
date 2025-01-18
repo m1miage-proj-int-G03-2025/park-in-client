@@ -1,12 +1,12 @@
 "use client";
 
-import { typesOpts } from "@/app/constants/typesOpts";
+import { typesOpts } from "@/constants/typesOpts";
 import { useMemo, useState } from "react";
 import InputField from "./components/input-field";
 import * as MaterialIcons from "react-icons/md";
-import { timeOpts } from "@/app/constants/timeOpts";
+import { timeOpts } from "@/constants/timeOpts";
 import { Button } from "@heroui/react";
-import { colors } from "@//app/constants/colors";
+import { colors } from "@/constants/colors";
 import { useRouter } from "next/navigation";
 
 const RechercheParkingView = () => {
@@ -27,6 +27,10 @@ const RechercheParkingView = () => {
     });
   };
 const handleRechercheClick = () => {
+    if(!reservationInfo.addresse || !reservationInfo.date || !reservationInfo.duree || !reservationInfo.typeVoiture) {
+        alert("Veuillez remplir tous les champs pour continuer");
+        return
+    }
     const queryString = encodeURIComponent(JSON.stringify(reservationInfo));
     route.push(`/parkings?searchQuery=${queryString}`);
 }

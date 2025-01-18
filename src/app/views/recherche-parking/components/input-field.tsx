@@ -1,5 +1,5 @@
-import { colors } from "@/app/constants/colors";
-import Icon from "@/app/components/icon";
+import Icon from "@/components/icon";
+import { colors } from "@/constants/colors";
 import React from "react";
 import * as MaterialIcons from "react-icons/md";
 
@@ -67,6 +67,7 @@ const InputField = (props: InputFieldProps) => {
         )}
         {inputType === "select" ? (
           <select
+            required
             value={value as string}
             onChange={handleInputChange}
             style={{
@@ -95,6 +96,7 @@ const InputField = (props: InputFieldProps) => {
           </select>
         ) : (
           <input
+            required
             type={inputType}
             placeholder={placeholder}
             value={

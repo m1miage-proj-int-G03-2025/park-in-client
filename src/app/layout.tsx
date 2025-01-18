@@ -17,6 +17,9 @@ const geistMono = Geist_Mono({
 export const metadata: Metadata = {
   title: "Park-In",
   description: "Site web de réservation de place de parking",
+  icons: {
+    icon: '/logo.png',
+  }
 };
 
 export default function RootLayout({
