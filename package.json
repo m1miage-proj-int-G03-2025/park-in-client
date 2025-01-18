@@ -12,7 +12,8 @@
     "prepare": "husky"
   },
   "dependencies": {
-    "@heroui/react": "2.6.13",
+    "@heroui/react": "^2.6.13",
+    "@nextui-org/react": "^2.6.10",
     "firebase": "^11.1.0",
     "framer-motion": "^11.15.0",
     "next": "15.1.3",
