@@ -1,12 +1,17 @@
-import { Input } from "@nextui-org/input";
-import { Button } from "@nextui-org/button";
-import { Image } from "@nextui-org/image";
-import { Form } from "@nextui-org/form";
+"use client";
+import { Input } from "@heroui/input";
+import { Button } from "@heroui/button";
+import { Image } from "@heroui/image";
+import { Form } from "@heroui/form";
 import { useState } from "react";
 import { signInWithEmailAndPassword } from "firebase/auth";
-import { auth } from "../../../../../firebaseConfig";
+import { auth } from "@/configs/firebaseConfig";
 
-export default function SignInWithEmailAndPassword() {
+interface SignInWithEmailAndPasswordProps {
+    onLogin: () => void;
+}
+
+export default function SignInWithEmailAndPassword({onLogin}: SignInWithEmailAndPasswordProps) {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
 
@@ -23,6 +28,7 @@ export default function SignInWithEmailAndPassword() {
             setInvalid(true);
             console.error("Erreur de connexion", error);
         }
+        onLogin();
       };
 
     return (
@@ -53,6 +59,7 @@ export default function SignInWithEmailAndPassword() {
                         value={password} onValueChange={setPassword}
                         endContent={
                             <Image 
+                                alt="password visibility"
                                 className="cursor-pointer"
                                 src={isPasswordVisible ? "/eye.png": "/eyeoff.png"} 
                                 width={24} 
