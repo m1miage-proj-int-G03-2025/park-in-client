@@ -17,8 +17,21 @@ const RechercheParkingView = () => {
     duree: "",
     typeVoiture: "",
   });
+  const [errors, setErrors] = useState({
+    addresse: false,
+    date: false,
+    duree: false,
+    typeVoiture: false,
+  });
 
   const handleSelection = (key: string, value: string | Date) => {
+    setErrors((prev) => {
+      return {
+        ...prev,
+        [key]: false,
+      };
+    });
+
     setReservationInfo((prev) => {
       return {
         ...prev,
@@ -28,8 +41,15 @@ const RechercheParkingView = () => {
   };
 const handleRechercheClick = () => {
     if(!reservationInfo.addresse || !reservationInfo.date || !reservationInfo.duree || !reservationInfo.typeVoiture) {
-        alert("Veuillez remplir tous les champs pour continuer");
-        return
+      const newError = {
+        addresse: !reservationInfo.addresse,
+        date: !reservationInfo.date,
+        duree: !reservationInfo.duree,
+        typeVoiture: !reservationInfo.typeVoiture,
+      };
+      
+      setErrors(newError);
+      return;
     }
     const queryString = encodeURIComponent(JSON.stringify(reservationInfo));
     route.push(`/parkings?searchQuery=${queryString}`);
@@ -38,11 +58,12 @@ const handleRechercheClick = () => {
   const fields: Array<{
     label: string;
     iconName?: keyof typeof MaterialIcons;
-    inputType?: "text" | "datetime-local" | "time" | "select";
+    inputType?: "text" | "datetime-local" | "select";
     placeholder: string;
     value: string | Date;
     onChange: (value: string | Date ) => void;
     options?: { label: string; value: string }[];
+    error?: boolean;
   }> = useMemo(() => {
     return [
       {
@@ -51,6 +72,7 @@ const handleRechercheClick = () => {
         placeholder: "Date de début",
         value: reservationInfo.date,
         onChange: (value: string | Date ) => handleSelection("date", value),
+        error: errors.date,
       },
       {
         label: "Durée",
@@ -60,6 +82,7 @@ const handleRechercheClick = () => {
         value: reservationInfo.duree,
         onChange: (value: string | Date) => handleSelection("duree", value),
         options: timeOpts,
+        error: errors.duree,
       },
       {
         label: "Type de place",
@@ -69,9 +92,10 @@ const handleRechercheClick = () => {
         value: reservationInfo.typeVoiture,
         onChange: (value: string | Date) => handleSelection("typeVoiture", value),
         options: typesOpts,
+        error: errors.typeVoiture,
       },
     ];
-  }, [reservationInfo]);
+  }, [reservationInfo, errors]);
 
   return (
     <div
@@ -113,6 +137,7 @@ const handleRechercheClick = () => {
             placeholder="Indiquez votre emplacement"
             value={reservationInfo.addresse}
             onChange={(value) => handleSelection("addresse", value)} 
+            error={errors.addresse}
         />
     </div>
 </div>
@@ -143,6 +168,7 @@ const handleRechercheClick = () => {
               value={field.value}
               onChange={field.onChange}
               options={field.options || []}
+              error={field.error || false}
             />
           </div>
         ))}
