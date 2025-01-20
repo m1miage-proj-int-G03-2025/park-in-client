@@ -5,7 +5,7 @@ import { useMemo, useState } from "react";
 import InputField from "./components/input-field";
 import * as MaterialIcons from "react-icons/md";
 import { timeOpts } from "@/constants/timeOpts";
-import { Button, Input } from "@heroui/react";
+import { Button } from "@heroui/react";
 import { colors } from "@/constants/colors";
 import { useRouter } from "next/navigation";
 
