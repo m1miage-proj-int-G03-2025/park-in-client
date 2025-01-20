@@ -1,5 +1,6 @@
 import Icon from "@/components/icon";
 import { colors } from "@/constants/colors";
+import { input } from "@heroui/react";
 import React from "react";
 import * as MaterialIcons from "react-icons/md";
 
@@ -106,6 +107,7 @@ const InputField = (props: InputFieldProps) => {
                   ? new Date(value.getTime() - value.getTimezoneOffset() * 60000).toISOString().slice(0, 16)
                   : (value as string)
               }
+            min={new Date().toISOString().slice(0, 16)}
             onChange={handleInputChange}
             style={{
               padding: iconName ? "12px 12px 12px 48px" : "13px",
