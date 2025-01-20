@@ -7,10 +7,11 @@ interface InputFieldProps {
   label: string;
   iconName?: keyof typeof MaterialIcons; 
   placeholder: string;
-  inputType?: "text" | "datetime-local" | "time" | "select";
+  inputType?: "text" | "datetime-local" | "select";
   options?: { label: string; value: string }[];
   value: string | Date ;
   onChange: (value: string | Date) => void;
+  error?: boolean;
 }
 
 const InputField = (props: InputFieldProps) => {
@@ -22,12 +23,13 @@ const InputField = (props: InputFieldProps) => {
     options = [],
     value,
     onChange,
+    error = false,
   } = props;
 
   const handleInputChange = (
     event: React.ChangeEvent<HTMLInputElement | HTMLSelectElement> 
   ) => {
-    if (inputType === "datetime-local" || inputType === "time") {
+    if (inputType === "datetime-local") {
       onChange(new Date(event.target.value)); 
     } else {
       onChange(event.target.value); 
@@ -61,7 +63,7 @@ const InputField = (props: InputFieldProps) => {
             style={{
               position: "absolute",
               left: "12px",
-              color: colors.main,
+              color: error? colors.errorRed : colors.main,
             }}
           />
         )}
@@ -72,7 +74,7 @@ const InputField = (props: InputFieldProps) => {
             onChange={handleInputChange}
             style={{
               padding: iconName ? "12px 12px 12px 48px" : "13px",
-              border: "1px solid #ccc",
+              border: error? "1px solid red" : "1px solid #ccc",
               borderRadius: "6px",
               backgroundColor: "#fff",
               width: "100%",
@@ -102,14 +104,12 @@ const InputField = (props: InputFieldProps) => {
             value={
                 inputType === "datetime-local" && value instanceof Date && !isNaN(value.getTime())
                   ? new Date(value.getTime() - value.getTimezoneOffset() * 60000).toISOString().slice(0, 16)
-                  : inputType === "time" && value instanceof Date && !isNaN(value.getTime())
-                  ? new Date(value.getTime() - value.getTimezoneOffset() * 60000).toISOString().slice(11, 16) 
                   : (value as string)
               }
             onChange={handleInputChange}
             style={{
               padding: iconName ? "12px 12px 12px 48px" : "13px",
-              border: "1px solid #ccc",
+              border: error? "1px solid red" : "1px solid #ccc",
               borderRadius: "6px",
               width: "100%",
               fontSize: "18px",
@@ -117,6 +117,21 @@ const InputField = (props: InputFieldProps) => {
             }}
           />
         )}
+        {
+          error && (
+            <div
+              style={{
+                position: "absolute",
+                bottom: "-20px",
+                color: "red",
+                fontSize: "14px",
+                fontWeight: "700",
+              }}
+            >
+              Veuillez remplir ce champ
+            </div>
+          )
+        }
       </div>
     </div>
   );
