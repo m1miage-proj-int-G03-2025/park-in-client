@@ -34,6 +34,9 @@ const RechercheParkingView = () => {
   ]
 
   const handleSelection = (key: string, value: string | Date) => {
+
+    console.log('Val by parent' + value)
+
     setErrors((prev) => {
       return {
         ...prev,
@@ -48,6 +51,9 @@ const RechercheParkingView = () => {
       };
     });
   };
+
+  console.log('errorsss' + errors)
+
 const handleRechercheClick = () => {
     if(!reservationInfo.addresse || !reservationInfo.date || !reservationInfo.duree || !reservationInfo.typeVoiture) {
       const newError = {
@@ -124,7 +130,7 @@ const handleRechercheClick = () => {
       <div className="relative w-[1024px] z-10 flex flex-col items-center h-2/3">
        <span className="mb-7 font-semibold text-3xl text-white items-center">Recherchez Des Parkings</span>
        <div className="items-center mb-5">
-       <span className="font-normal text-xl text-white items-center">-Trouver une place de parking n'a jamais été aussi simple-</span>
+       <span className="font-normal text-xl text-white items-center">-Trouver une place de parking n`a jamais été aussi simple-</span>
        </div>
         <div className="flex items-center justify-center gap-4 p-4 mb-5 w-[550px]">
           <div className="flex-1">

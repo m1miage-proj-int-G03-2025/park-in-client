@@ -1,9 +1,9 @@
 import Icon from "@/components/icon";
 import { colors } from "@/constants/colors";
-import { Autocomplete, AutocompleteItem, DatePicker, Input, input, Select, SelectItem } from "@heroui/react";
+import { Autocomplete, AutocompleteItem, DatePicker, Input, Select, SelectItem } from "@heroui/react";
 import React, { useMemo } from "react";
 import * as MaterialIcons from "react-icons/md";
-import { fromDate, getLocalTimeZone, now, parseDate } from '@internationalized/date';
+import { fromDate, getLocalTimeZone, today, toZoned } from '@internationalized/date';
 
 interface InputFieldProps {
   label: string;
@@ -31,24 +31,38 @@ const InputField = (props: InputFieldProps) => {
     onChange = () => {},
     error = false,
     disabled = false,
-    labelColor = "black",
+    labelColor = "white",
     iconColor = colors.main,
     required = false
   } = props;
 
   const handleInputChange = (
-      event: React.ChangeEvent<HTMLInputElement | HTMLSelectElement> | Date 
+      event: React.ChangeEvent<HTMLInputElement | HTMLSelectElement> | Date | string
     ) => {
-      if (inputType === "datetime-local" && event instanceof Date) {
-        onChange(event); 
-      } else if (event instanceof Event) {
-        const target = event.target as HTMLInputElement | HTMLSelectElement;
-        onChange(target.value); 
+      console.log(event)
+      if (inputType === "datetime-local") {
+        console.log('it is')
+        onChange(event as Date); 
+      } else {
+        if (event instanceof Date) {
+          onChange(event);
+        } else {
+          if(inputType === "auto-complete") {
+            onChange(event as unknown as string);
+          } else {
+          if (typeof event !== 'string') {
+            const target = event.target as HTMLInputElement | HTMLSelectElement;
+            onChange(target.value as string);
+          }
+          }
+        }
       }
     };
 
+    console.log(value)
+
   const errorMessage = useMemo(() => {
-    return error ? "Veuillez remplir ce champ" : "";
+    return error ? "Veuillez remplir ce champ" : null;
   }, [error])
 
   const inputComponent = useMemo(() => {
@@ -57,7 +71,9 @@ const InputField = (props: InputFieldProps) => {
             return (
                 <Select
                     className="bg-white rounded-lg shadow-lg p-0 m-0"
-                    label={<span className="text-white font-bold bg-transparent 16px text-lg">{label}</span>}
+                    label={<span className="text-white font-bold bg-transparent 16px text-lg" style={{
+                      color: labelColor
+                    }}>{label}</span>}
                     disabled={disabled}
                     size="lg"
                     placeholder={placeholder}
@@ -80,18 +96,30 @@ const InputField = (props: InputFieldProps) => {
         case "datetime-local": {
             return (
                 <div>
-                <span className="text-white !bg-transparent font-bold margin-bottom-10 text-lg">{label}</span>
+                <span className="text-white !bg-transparent font-bold margin-bottom-10 text-lg" style={{
+                  color: labelColor
+                }}>{label}</span>
                 <DatePicker
-                minValue={now(getLocalTimeZone())}
                 hideTimeZone
-                showMonthAndYearPickers
+                granularity="minute"
+                minValue={today(getLocalTimeZone())}
                 className="bg-white rounded-lg shadow-lg p-0 m-0"
-                value={fromDate(value instanceof Date ? value : new Date(), 'UTC') as any}
+                value={
+                  value instanceof Date && !isNaN(value.getTime())
+                    ? toZoned(fromDate(value, getLocalTimeZone()), getLocalTimeZone())
+                    : toZoned(fromDate(new Date(), getLocalTimeZone()), getLocalTimeZone())
+                }
                 size="lg"
                 isRequired={required}
                 isInvalid={error}
                 errorMessage={errorMessage}
-                onChange={(value) => handleInputChange(value?.toDate('UTC') as Date)}
+                onChange={(newValue) => {
+                  console.log('new Value:' + newValue)
+                  if (newValue) {
+                    const selectedDate = newValue.toDate();
+                    handleInputChange(selectedDate);
+                  }
+                }}
                 color="primary"
                 isDisabled={disabled}
                 startContent={iconName ? <Icon name={iconName} color="primary" /> : null}
@@ -107,7 +135,9 @@ const InputField = (props: InputFieldProps) => {
             return (
               <div>
               <div className="mb-0.5 mt-1">
-              <span className="text-white !bg-transparent font-bold margin-bottom-10 text-lg">{label}</span>
+              <span className="text-white !bg-transparent font-bold margin-bottom-10 text-lg" style={{
+                color: labelColor
+              }}>{label}</span>
               </div>
                 <Autocomplete
                 className="bg-white rounded-lg shadow-lg p-0 m-0"
@@ -119,7 +149,12 @@ const InputField = (props: InputFieldProps) => {
                 isInvalid={error}
                 isDisabled={disabled}
                 value={value as string}
-                onChange={handleInputChange}
+                onSelectionChange={(val) => {
+                  const selectedOption = options.find(option => option.value === val);
+                  if (selectedOption) {
+                    handleInputChange(selectedOption.label);
+                  }
+                }}
                 errorMessage={errorMessage}
                 startContent={iconName ? <Icon name={iconName} color={iconColor} /> : null}
                 labelPlacement="outside"
@@ -157,7 +192,7 @@ const InputField = (props: InputFieldProps) => {
         }
     }
 
-  }, [inputType])
+  }, [inputType, value, error, disabled, label, iconName, placeholder, options, handleInputChange, errorMessage, required, iconColor])
 
   return (
     inputComponent
