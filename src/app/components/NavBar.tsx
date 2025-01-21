@@ -28,7 +28,7 @@ export default function NavBar() {
 
     return(
         <div className="fixed w-screen bg-white">
-            <div className="flex justify-between items-center py-2 px-6">
+            <div className="flex justify-between items-center py-2 px-6 shadow-xl">
                 <div>
                     <LogoParkin width={70} size="2xl"/>
                 </div>

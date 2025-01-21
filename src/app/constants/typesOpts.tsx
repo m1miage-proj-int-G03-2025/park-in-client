@@ -1,6 +1,6 @@
 export const typesOpts = [
-    { value: 'voiture', label: 'Voiture' },
-    { value: 'velo', label: 'Vélo' },
+    { value: 'Voiture', label: 'Voiture' },
+    { value: 'Velo', label: 'Vélo' },
     { value: 'VoitElect', label: 'Voiture électrique' },
     { value: '2rEi', label: '2 roue EI'},
     { value: 'AutoPartage', label: 'Autopartage' },
