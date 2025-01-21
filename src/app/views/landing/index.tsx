@@ -23,7 +23,7 @@ export default function LandingView() {
                     </div> 
                     <div className="text-3xl font-semibold">Garez-vous sereinement, réservez instantanément</div>
                     <div>
-                        <Button startContent={<BsSendFill color="white" />} onPress={() => router.push("/")} className="px-3 py-3 font-semibold text-lg mt-4" radius="full" color="primary">Trouver des places de parking</Button>
+                        <Button startContent={<BsSendFill color="white" />} onPress={() => router.push("/recherche-parking")} className="px-3 py-3 font-semibold text-lg mt-4" radius="full" color="primary">Trouver des places de parking</Button>
                     </div>
                 </div>
             </div>
