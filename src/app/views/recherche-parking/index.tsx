@@ -2,12 +2,11 @@
 
 import { typesOpts } from "@/constants/typesOpts";
 import { useMemo, useState } from "react";
-import InputField from "./components/input-field";
 import * as MaterialIcons from "react-icons/md";
 import { timeOpts } from "@/constants/timeOpts";
 import { Button } from "@heroui/react";
-import { colors } from "@/constants/colors";
 import { useRouter } from "next/navigation";
+import InputField from "@/components/inputField";
 
 const RechercheParkingView = () => {
   const route = useRouter()
@@ -17,8 +16,33 @@ const RechercheParkingView = () => {
     duree: "",
     typeVoiture: "",
   });
+  const [errors, setErrors] = useState({
+    addresse: false,
+    date: false,
+    duree: false,
+    typeVoiture: false,
+  });
+
+  const villes = [
+      {label: "Paris", value: "0"},
+      {label: "Lyon", value: "1"},
+      {label: "Marseille", value: "2"},
+      {label: "Toulouse", value: "3"},
+      {label: "Nice", value: "4"},
+      {label: "Nantes", value: "5"},
+      {label: "Montpellier", value: "6"},
+  ];
+
+  const slogan = "-Trouver une place de parking n'a jamais été aussi simple-"
 
   const handleSelection = (key: string, value: string | Date) => {
+    setErrors((prev) => {
+      return {
+        ...prev,
+        [key]: false,
+      };
+    });
+
     setReservationInfo((prev) => {
       return {
         ...prev,
@@ -28,8 +52,15 @@ const RechercheParkingView = () => {
   };
 const handleRechercheClick = () => {
     if(!reservationInfo.addresse || !reservationInfo.date || !reservationInfo.duree || !reservationInfo.typeVoiture) {
-        alert("Veuillez remplir tous les champs pour continuer");
-        return
+      const newError = {
+        addresse: !reservationInfo.addresse,
+        date: !reservationInfo.date,
+        duree: !reservationInfo.duree,
+        typeVoiture: !reservationInfo.typeVoiture,
+      };
+      
+      setErrors(newError);
+      return;
     }
     const queryString = encodeURIComponent(JSON.stringify(reservationInfo));
     route.push(`/parkings?searchQuery=${queryString}`);
@@ -38,11 +69,12 @@ const handleRechercheClick = () => {
   const fields: Array<{
     label: string;
     iconName?: keyof typeof MaterialIcons;
-    inputType?: "text" | "datetime-local" | "time" | "select";
+    inputType?: "text" | "datetime-local" | "select";
     placeholder: string;
     value: string | Date;
     onChange: (value: string | Date ) => void;
     options?: { label: string; value: string }[];
+    error?: boolean;
   }> = useMemo(() => {
     return [
       {
@@ -51,6 +83,7 @@ const handleRechercheClick = () => {
         placeholder: "Date de début",
         value: reservationInfo.date,
         onChange: (value: string | Date ) => handleSelection("date", value),
+        error: errors.date,
       },
       {
         label: "Durée",
@@ -60,6 +93,7 @@ const handleRechercheClick = () => {
         value: reservationInfo.duree,
         onChange: (value: string | Date) => handleSelection("duree", value),
         options: timeOpts,
+        error: errors.duree,
       },
       {
         label: "Type de place",
@@ -69,100 +103,68 @@ const handleRechercheClick = () => {
         value: reservationInfo.typeVoiture,
         onChange: (value: string | Date) => handleSelection("typeVoiture", value),
         options: typesOpts,
+        error: errors.typeVoiture,
       },
     ];
-  }, [reservationInfo]);
+  }, [reservationInfo, errors]);
 
   return (
-    <div
-      style={{
-        backgroundImage: "url('/bg-search-page.png')",
-        backgroundSize: "cover",
-        backgroundRepeat: "no-repeat",
-        backgroundPosition: "center",
-        height: "100vh",
-        width: "100%",
-        display: "flex",
-        alignItems: "center",
-        flexDirection: "column",
-      }}
-    >
-    <div
-        style={{
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-            flexDirection: "column",
-            height: "70%",
-        }}>
-<div
-    style={{
-        display: "flex",
-        justifyContent: "center",
-        alignItems: "center",
-        gap: "1rem",
-        padding: "1rem",
-        marginBottom: "20px",
-        width: "550px",
-    }}>
-    <div style={{ flex: 1 }}> 
-        <InputField
-            label="Adresse"
-            iconName="MdLocationOn"
-            inputType="text"
-            placeholder="Indiquez votre emplacement"
-            value={reservationInfo.addresse}
-            onChange={(value) => handleSelection("addresse", value)} 
-        />
-    </div>
-</div>
-      <div
-        style={{
-          display: "flex",
-          gap: "1rem",
-          width: "100%",
-          justifyContent: "center",
-          marginBottom: "40px",
-        }}
-      >
-        {fields.map((field, index) => (
-          <div
-            key={index}
-            style={{
-              flex: "1",
-              width: "300px",
-              display: "flex",
-              flexDirection: "column",
-            }}
-          >
+    <div className="w-full min-h-screen flex flex-col items-center justify-center bg-transparent overflow-hidden">
+      <div className="absolute inset-0 bg-primary mt-20">
+        <svg
+          className="absolute bottom-0 left-0 w-full h-[800px]"
+          xmlns="http://www.w3.org/2000/svg"
+          viewBox="0 0 1440 320"
+          preserveAspectRatio="none"
+        >
+          <path
+            fill="#ffffff"
+            d="M0,64L48,96C96,128,192,192,288,224C384,256,480,256,576,240C672,224,768,192,864,180C960,168,1056,128,1152,100C1248,72,1344,60,1392,50L1440,40V320H0Z"
+          ></path>
+        </svg>
+      </div>
+      <div className="relative w-[1024px] z-10 flex flex-col items-center h-2/3">
+       <span className="mb-7 font-semibold text-3xl text-white items-center">Recherchez des parkings</span>
+       <div className="items-center mb-5">
+       <span className="font-normal text-xl text-white items-center">{slogan}</span>
+       </div>
+        <div className="flex items-center justify-center gap-4 p-4 mb-5 w-[550px]">
+          <div className="flex-1">
             <InputField
-              label={field.label}
-              iconName={field.iconName}
-              inputType={field.inputType}
-              placeholder={field.placeholder}
-              value={field.value}
-              onChange={field.onChange}
-              options={field.options || []}
+              label="Adresse"
+              iconName="MdLocationOn"
+              inputType="auto-complete"
+              options={villes}
+              placeholder="Indiquez votre emplacement"
+              value={reservationInfo.addresse}
+              onChange={(value) => handleSelection("addresse", value)}
+              error={errors.addresse}
             />
           </div>
-        ))}
+        </div>
+        <div className="flex gap-4 w-full justify-center mb-10">
+          {fields.map((field, index) => (
+            <div key={index} className="flex-1 w-[300px] flex flex-col">
+              <InputField
+                label={field.label}
+                iconName={field.iconName}
+                inputType={field.inputType}
+                placeholder={field.placeholder}
+                value={field.value}
+                onChange={field.onChange}
+                options={field.options || []}
+                error={field.error || false}
+              />
+            </div>
+          ))}
+        </div>
+        <Button
+          className="mt-4 px-14 py-6 bg-secondary text-white rounded-full text-lg font-semibold shadow-xl"
+          onClick={handleRechercheClick}
+        >
+          Rechercher des places parking
+        </Button>
       </div>
-      <Button
-        style={{
-          marginTop: "1rem",
-          padding: "25px 30px",
-          backgroundColor: colors.main,
-          color: "#fff",
-          borderRadius: "25px",
-          fontSize: "18px",
-          fontWeight: "600",
-          alignSelf: "center",
-        }}
-        onClick={handleRechercheClick}
-      >
-        Rechercher des places parking
-      </Button>
-    </div>
     </div>
   );
 };

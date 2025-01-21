@@ -13,9 +13,24 @@ export default {
       colors: {
         background: "var(--background)",
         foreground: "var(--foreground)",
+        primary: "#2b77c4",
+        secondary: "#3e9247",
+        default: "#FFFFFF",
       },
     },
   },
   darkMode: "class",
-  plugins: [heroui()],
+  plugins: [heroui({
+    addCommonColors: true,
+    defaultTheme: "light",
+    themes: {
+      light: {
+        colors: {
+          default: "#FFFFFF",
+          primary: "#2b77c4",
+          secondary: "#3e9247",
+        }
+      }
+    }
+  })],
 } satisfies Config;

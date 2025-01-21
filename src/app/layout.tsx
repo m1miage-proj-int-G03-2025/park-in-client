@@ -34,7 +34,7 @@ export default function RootLayout({
             integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossOrigin=""/>
       </head>
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+        className={`light ${geistSans.variable} ${geistMono.variable} antialiased`}
       >
         <Providers>
           <ClientWrapper>
