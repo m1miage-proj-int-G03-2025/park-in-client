@@ -2,12 +2,20 @@
 import SignInWithGoogle from "./components/signinWithGoogle";
 import SignInWithEmailAndPassword from "./components/SigninWithEmailAndPassword";
 import LogoParkin from "@/components/logoParkin";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 
 export default function LoginView() {
     const router = useRouter();
-
-    const handleLogin = () => router.back();
+    const searchParams = useSearchParams();
+    const searchQuery = searchParams.get('searchQuery');
+    console.log(searchQuery)
+    const handleLogin = () => {
+        if(searchQuery) {
+            //send post request to backend
+            //navigate to reservation confirmed page
+        } else {
+            router.back()
+        }};
 
     return (
         <div className="flex flex-col justify-center items-center h-screen">

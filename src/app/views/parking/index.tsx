@@ -9,14 +9,14 @@ import TotalPriceBar from "./components/total-price";
 import InfoField from "./components/info-field";
 import ReservationDetailsModal from "./components/reservation-details-modal";
 import { useParams } from "next/navigation";
+import { useAuth } from "@/providers/AuthProvider";
+import { useRouter } from "next/navigation";
 
 const ParkingView = () => {
   const parkingDetails = { //replace with GET /:id
     nom: "Parking XY",
     adresse: "Rue de Paris",
     urlSite: "www.parking-xy.com",
-    typeOuvrage: "Souterrain",
-    capacite: 100,
       tarif1h: 2.4,
       tarif2h: 4.8,
       tarif3h: 7.2,
@@ -68,6 +68,7 @@ const ParkingView = () => {
     { numeroPlace: "A40", typePlace: "Voiture", etage: 5 },
   ]
   const { parkingId } = useParams() as { parkingId: string };
+  const router = useRouter();
 
   const [reservationInfo, setReservationInfo] = useState({
     date: new Date("2022-01-01T00:00"),                     //replace with QueryString
@@ -79,12 +80,21 @@ const ParkingView = () => {
   });
   const [selectedEtage, setSelectedEtage] = useState(1);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const {user} = useAuth();
 
-  const handleSelect = (key: string, value: string) => {
-    setSelectedPlace((prev) => ({
-      ...prev,
-      [key]: value,
-    }));
+  const handleSelect = (key: keyof typeof selectedPlace, value: string) => {
+    if(selectedPlace[key] === value) {
+      setSelectedPlace((prev) => ({
+        ...prev,
+        numeroPlace: "",
+      }))
+    } else {
+      setSelectedPlace((prev) => ({
+        ...prev,
+        [key]: value,
+      }));
+
+    }
   };
 
   const handleReservationClick = () => {
@@ -93,7 +103,17 @@ const ParkingView = () => {
 
   const handleConfirmReservation = () => {
     setIsModalOpen(false);
-    //Send post reservation request
+    if(user) {
+      //send post reservation request
+      // navigate to confirmation page with search params confirmed
+    } else {
+      const queryString = encodeURIComponent(JSON.stringify({
+        idPlace: selectedPlace?.numeroPlace,
+        date: reservationInfo.date,
+        duree: reservationInfo.duree,
+      }));
+      router.push(`/login?searchQuery=${queryString}`);
+    }
   }
 
   const handleReservationInfoChange = (key: string, value: string | Date) => {
@@ -165,14 +185,6 @@ const ParkingView = () => {
       {
         text: parkingDetails.adresse,
         iconName: "MdLocationOn" as const,
-      },
-      {
-        text: parkingDetails.typeOuvrage,
-        iconName: "MdViewDay" as const,
-      },
-      {
-        text: parkingDetails.capacite.toString(),
-        iconName: "MdPeople" as const,
       },
       {
         type: "link",
