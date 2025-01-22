@@ -42,7 +42,7 @@ export default function NavBar() {
                 </div>
                 <div>
                     {
-                        (!user && <Button onPress={() => router.push("/login")} className="px-3 py-2 font-semibold mr-20" radius="full" color="primary">Se connecter</Button>)
+                        (!user && <Button onPress={() => router.push("/login")} className="px-3 py-2 font-semibold mr-20 text-white" radius="full" color="primary">Se connecter</Button>)
                     }
                     {
                         (user && <LoggedUserInfo user={user} onLogout={handleLogout} />)
