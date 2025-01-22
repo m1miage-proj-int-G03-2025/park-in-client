@@ -11,61 +11,52 @@ import ReservationDetailsModal from "./components/reservation-details-modal";
 import { useParams } from "next/navigation";
 import { useAuth } from "@/providers/AuthProvider";
 import { useRouter } from "next/navigation";
+import { Accordion, AccordionItem } from "@heroui/react";
+import Icon from "@/components/icon";
 
 const ParkingView = () => {
   const parkingDetails = { //replace with GET /:id
     nom: "Parking XY",
     adresse: "Rue de Paris",
     urlSite: "www.parking-xy.com",
-      tarif1h: 2.4,
-      tarif2h: 4.8,
-      tarif3h: 7.2,
-      tarif4h: 9.6,
+    tarif1h: 2.4,
+    tarif2h: 4.8,
+    tarif3h: 7.2,
+    tarif4h: 9.6,
     yLatitude: 48.8566,
     xLongitude: 2.3522,
   };
 
   const dummyData = [                                        //replace with GET /:id/places the map function
-    { numeroPlace: "A1", typePlace: "Voiture", etage: 1 },
-    { numeroPlace: "A2", typePlace: "Velo", etage: 1},
-    { numeroPlace: "A3", typePlace: "VoitElect", etage: 1 },
-    { numeroPlace: "A4", typePlace: "2rEi", etage: 1 },
-    { numeroPlace: "A5", typePlace: "AutoPartage" , etage: 1},
-    { numeroPlace: "A6", typePlace: "PR", etage: 1 },
-    { numeroPlace: "A7", typePlace: "PMR", etage: 1 },
-    { numeroPlace: "A8", typePlace: "2RouesMotrice", etage: 1 },
-    { numeroPlace: "A9", typePlace: "Covoiturage" , etage: 1},
-    { numeroPlace: "A10", typePlace: "Voiture", etage: 1 },
-    { numeroPlace: "A11", typePlace: "Voiture" , etage: 2},
-    { numeroPlace: "A12", typePlace: "Velo", etage: 2 },
-    { numeroPlace: "A13", typePlace: "VoitElect" , etage: 2},
-    { numeroPlace: "A14", typePlace: "2rEi", etage: 2 },
-    { numeroPlace: "A15", typePlace: "AutoPartage" , etage: 2},
-    { numeroPlace: "A16", typePlace: "PR", etage: 2 },
-    { numeroPlace: "A17", typePlace: "PMR" , etage: 2},
-    { numeroPlace: "A18", typePlace: "2RouesMotrice" , etage: 2},
-    { numeroPlace: "A19", typePlace: "Covoiturage", etage: 2 },
-    { numeroPlace: "A20", typePlace: "Voiture" , etage: 2},
-    { numeroPlace: "A21", typePlace: "Voiture" , etage: 2},
-    { numeroPlace: "A22", typePlace: "Velo" , etage: 2},
-    { numeroPlace: "A23", typePlace: "VoitElect" , etage: 2},
-    { numeroPlace: "A24", typePlace: "2rEi" , etage: 2},
-    { numeroPlace: "A25", typePlace: "AutoPartage", etage: 2 },
-    { numeroPlace: "A26", typePlace: "PR" , etage: 2},
-    { numeroPlace: "A27", typePlace: "PMR", etage: 2 },
-    { numeroPlace: "A28", typePlace: "2RouesMotrice" , etage: 3},
-    { numeroPlace: "A29", typePlace: "Covoiturage", etage: 3 },
-    { numeroPlace: "A30", typePlace: "Voiture" , etage: 3},
-    { numeroPlace: "A31", typePlace: "Voiture", etage: 3 },
-    { numeroPlace: "A32", typePlace: "Velo" , etage: 3},
-    { numeroPlace: "A33", typePlace: "VoitElect" , etage: 3},
-    { numeroPlace: "A34", typePlace: "2rEi",  etage: 4 },
-    { numeroPlace: "A35", typePlace: "AutoPartage" , etage: 4},
-    { numeroPlace: "A36", typePlace: "PR" , etage: 4},
-    { numeroPlace: "A37", typePlace: "PMR" , etage: 4},
-    { numeroPlace: "A38", typePlace: "2RouesMotrice" , etage: 4},
-    { numeroPlace: "A39", typePlace: "Covoiturage" , etage: 4},
-    { numeroPlace: "A40", typePlace: "Voiture", etage: 5 },
+    { numeroPlace: "A1", typePlace: "Voiture", etage: 1, bloc: 1, aille: 'A' },
+    { numeroPlace: "A2", typePlace: "Velo", etage: 1, bloc: 1, aille: 'A' },
+    { numeroPlace: "A3", typePlace: "VoitElect", etage: 1, bloc: 1, aille: 'A' },
+    { numeroPlace: "A4", typePlace: "2rEi", etage: 1, bloc: 1, aille: 'A' },
+    { numeroPlace: "A5", typePlace: "AutoPartage", etage: 1, bloc: 1, aille: 'A' },
+    { numeroPlace: "A6", typePlace: "PR", etage: 1, bloc: 1, aille: 'A' },
+    { numeroPlace: "A7", typePlace: "PMR", etage: 1, bloc: 1, aille: 'A' },
+    { numeroPlace: "A8", typePlace: "2RouesMotrice", etage: 1, bloc: 1, aille: 'A' },
+    { numeroPlace: "A9", typePlace: "Covoiturage", etage: 1, bloc: 1, aille: 'A' },
+    { numeroPlace: "A10", typePlace: "Voiture", etage: 1, bloc: 1, aille: 'B' },
+    { numeroPlace: "A11", typePlace: "Voiture", etage: 2, bloc: 1, aille: 'B' },
+    { numeroPlace: "A12", typePlace: "Velo", etage: 2, bloc: 2, aille: 'B' },
+    { numeroPlace: "A13", typePlace: "VoitElect", etage: 2, bloc: 2, aille: 'C' },
+    { numeroPlace: "A14", typePlace: "2rEi", etage: 2, bloc: 2, aille: 'D' },
+    { numeroPlace: "A15", typePlace: "AutoPartage", etage: 2, bloc: 2, aille: 'D' },
+    { numeroPlace: "A16", typePlace: "PR", etage: 2, bloc: 2, aille: 'C' },
+    { numeroPlace: "A17", typePlace: "PMR", etage: 2, bloc: 2, aille: 'C' },
+    { numeroPlace: "A18", typePlace: "2RouesMotrice", etage: 2, bloc: 2, aille: 'D' },
+    { numeroPlace: "A19", typePlace: "Covoiturage", etage: 2, bloc: 3, aille: 'C' },
+    { numeroPlace: "A20", typePlace: "Voiture", etage: 2, bloc: 3, aille: 'C' },
+    { numeroPlace: "A21", typePlace: "Voiture", etage: 2, bloc: 5, aille: 'C' },
+    { numeroPlace: "A22", typePlace: "Velo", etage: 2, bloc: 4, aille: 'C' },
+    { numeroPlace: "A23", typePlace: "VoitElect", etage: 2, bloc: 3, aille: 'C' },
+    { numeroPlace: "A24", typePlace: "2rEi", etage: 2, bloc: 5, aille: 'B' },
+    { numeroPlace: "A25", typePlace: "AutoPartage", etage: 2, bloc: 2, aille: 'B' },
+    { numeroPlace: "A26", typePlace: "PR", etage: 2, bloc: 1, aille: 'B' },
+    { numeroPlace: "A27", typePlace: "PMR", etage: 2, bloc: 1, aille: 'B' },
+    { numeroPlace: "A28", typePlace: "2RouesMotrice", etage: 3, bloc: 1, aille: 'B' },
+
   ]
   const { parkingId } = useParams() as { parkingId: string };
   const router = useRouter();
@@ -78,12 +69,12 @@ const ParkingView = () => {
     typePlace: "Voiture",
     numeroPlace: "",
   });
-  const [selectedEtage, setSelectedEtage] = useState(1);
+  const [selectedBloc, setSelectedBloc] = useState(1);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const {user} = useAuth();
+  const { user } = useAuth();
 
   const handleSelect = (key: keyof typeof selectedPlace, value: string) => {
-    if(selectedPlace[key] === value) {
+    if (selectedPlace[key] === value) {
       setSelectedPlace((prev) => ({
         ...prev,
         numeroPlace: "",
@@ -103,7 +94,7 @@ const ParkingView = () => {
 
   const handleConfirmReservation = () => {
     setIsModalOpen(false);
-    if(user) {
+    if (user) {
       //send post reservation request
       // navigate to confirmation page with search params confirmed
     } else {
@@ -166,7 +157,17 @@ const ParkingView = () => {
   }, [reservationInfo]);
 
 
-  const etageOptions = useMemo(()=> {
+  const blocOptions = useMemo(() => {
+    return Array.from(
+      new Set(dummyData.map((place) => place.bloc))
+    ).map((bloc) => ({
+      label: `Bloc ${bloc}`,
+      value: bloc.toString()
+    }));
+
+  }, [dummyData])
+
+  const etageOptions = useMemo(() => {
     return Array.from(
       new Set(dummyData.map((place) => place.etage))
     ).map((etage) => ({
@@ -177,8 +178,8 @@ const ParkingView = () => {
   }, [dummyData])
 
   const placesAvailable = useMemo(() => {
-    return dummyData.filter((place) => place.etage === selectedEtage);
-  }, [selectedEtage, dummyData]);
+    return dummyData.filter((place) => place.bloc === selectedBloc);
+  }, [selectedBloc, dummyData]);
 
   const infoFields = useMemo(() => {
     return [
@@ -214,37 +215,37 @@ const ParkingView = () => {
       <div
         className="pt-16 pb-24 overflow-y-auto"
         style={{
-          height: "calc(100vh - 80px)", 
+          height: "calc(100vh - 80px)",
         }}
       >
-        <ReservationDetailsModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} reservationDetails={reservationDetails} onConfirm={handleConfirmReservation}/>
+        <ReservationDetailsModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} reservationDetails={reservationDetails} onConfirm={handleConfirmReservation} />
         <div className="p-6">
-          <label className="text-left text-3xl font-bold text-black mb-6 block">
+          <label className="text-left text-3xl font-bold text-black mb-6 bloc">
             {parkingDetails.nom}
           </label>
           <div className="flex flex-row items-center gap-20 mt-10 mb-10">
-      {infoFields?.map((field, index) => {
-      return <InfoField key={index} {...field} />
-       })}     
-       </div>
-        { preSelectedFields && <div className="mb-10 w-1/2 flex flex-row pl-0 gap-4">
+            {infoFields?.map((field, index) => {
+              return <InfoField key={index} {...field} />
+            })}
+          </div>
+          {preSelectedFields && <div className="mb-10 w-1/2 flex flex-row pl-0 gap-4">
             {preSelectedFields.map((field, index) => {
               return (
                 <div className="flex-1" key={index}>
-                <InputField
-                  label={field.label}
-                  placeholder={field.placeholder}
-                  disabled={field.disabled}
-                  inputType={field.inputType}
-                  value={field.value}
-                  labelColor={field.labelColor}
-                  iconName={
-                    field.iconName as "MdCalendarToday" | "MdLock"
-                  }
-                  iconColor={field.iconColor}
-                  options={field.options}
-                  onChange={field.onChange}
-                />
+                  <InputField
+                    label={field.label}
+                    placeholder={field.placeholder}
+                    disabled={field.disabled}
+                    inputType={field.inputType}
+                    value={field.value}
+                    labelColor={field.labelColor}
+                    iconName={
+                      field.iconName as "MdCalendarToday" | "MdLock"
+                    }
+                    iconColor={field.iconColor}
+                    options={field.options}
+                    onChange={field.onChange}
+                  />
                 </div>
               );
             })}
@@ -252,7 +253,7 @@ const ParkingView = () => {
 
           <div className="flex items-start">
             <div className="flex flex-col w-full">
-              <label className="text-lg font-semibold text-primary mb-3 pl-2">
+              <label className="text-xl font-semibold text-primary mb-3 pl-2">
                 Choisissez type de place
               </label>
               <TypePlaceSelector
@@ -261,32 +262,48 @@ const ParkingView = () => {
                   handleSelect("typePlace", typePlace)
                 }
               />
-        <div className="flex flex-row items-center justify-between">
-          <label className="text-lg font-semibold text-primary">
-              Choisissez Une Place
-         </label>
-           <div className="relative w-1/6 pr-20">
-            <InputField 
-            inputType="select"
-            label=""
-            placeholder="Etage"
-            value={selectedEtage.toString()}
-            options={etageOptions}
-            onChange={(value: string | Date) => 
-            setSelectedEtage(parseInt(value as string))
-         }
-       />
-      </div>
-  </div>
+              <div className="flex flex-row items-center justify-between">
+                <label className="text-xl font-semibold text-primary">
+                  Choisissez Une Place
+                </label>
+                <div className="relative w-1/6 pr-20 mb-10">
+                  <InputField
+                    inputType="select"
+                    label=""
+                    placeholder="Bloc"
+                    value={selectedBloc.toString()}
+                    options={blocOptions}
+                    onChange={(value: string | Date) =>
+                      setSelectedBloc(parseInt(value as string))
+                    }
+                  />
+                </div>
+              </div>
+              <Accordion showDivider={false}>
+                {
+                  etageOptions?.map((etage) => {
+                    return (<AccordionItem key={etage.value} aria-label={etage.label} title={etage.label} 
+                      startContent={<Icon name='MdStairs' color={colors.main} size={30} />}
+                      classNames={{
+                      title: "bg-transparent text-slate-500 font-semibold",
+                      base: "bg-transparent",
+                      content: "bg-transparent",
+                      heading: 'bg-white rounded-2xl px-14 shadow-lg' 
+                }} >
+                      <PlaceSelector
+                        places={placesAvailable.filter((place) => place.etage === parseInt(etage.value))}
+                        selectedPlace={selectedPlace?.numeroPlace}
+                        selectedTypePlace={selectedPlace?.typePlace}
+                        onSelectPlace={(numPlace) => {
+                          handleSelect("numeroPlace", numPlace);
+                        }}
+                      />
 
-              <PlaceSelector
-                places={placesAvailable}
-                selectedPlace={selectedPlace?.numeroPlace}
-                selectedTypePlace={selectedPlace?.typePlace}
-                onSelectPlace={(numPlace) => {
-                  handleSelect("numeroPlace", numPlace);
-                }}
-              />
+                    </AccordionItem>)
+                  })
+
+                }
+              </Accordion>
             </div>
           </div>
         </div>
