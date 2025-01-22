@@ -9,26 +9,29 @@ interface PopupMarkerProps {
   index: number;
   popupRefs: React.RefObject<(L.Popup | null)[]>;
   indexClicked: number
+  oneLoc?: boolean;
 }
 
-const LeafletMarker: React.FC<PopupMarkerProps> = ({ position, index, popupRefs, nom, indexClicked }) => {
+const LeafletMarker: React.FC<PopupMarkerProps> = ({ position, index, popupRefs, nom, indexClicked, oneLoc }) => {
+ 
   const map = useMap();
   
     useEffect(() => {
         const handleLocationClicked = (indexClicked: number) => {
-                if (popupRefs.current[indexClicked]) {
+                if (popupRefs.current[indexClicked] && !oneLoc) {
                     map.openPopup(popupRefs.current[indexClicked]);
                 }
         }
-        handleLocationClicked(indexClicked)
+       handleLocationClicked(indexClicked)
     }, [indexClicked]);
 
   return (
     <>
       <Marker position={position}>
-        <Popup ref={(el) => { if (el) popupRefs.current[index] = el; }}>
+{ !oneLoc && <Popup ref={(el) => { if (el) popupRefs.current[index] = el; }}>
           {nom}
         </Popup>
+        }
       </Marker>
     </>
   );

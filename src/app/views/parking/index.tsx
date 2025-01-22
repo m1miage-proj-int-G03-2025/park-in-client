@@ -13,6 +13,7 @@ import { useAuth } from "@/providers/AuthProvider";
 import { useRouter } from "next/navigation";
 import { Accordion, AccordionItem } from "@heroui/react";
 import Icon from "@/components/icon";
+import LeafletMap from "@/components/LeafletMap";
 
 const ParkingView = () => {
   const parkingDetails = { //replace with GET /:id
@@ -23,8 +24,8 @@ const ParkingView = () => {
     tarif2h: 4.8,
     tarif3h: 7.2,
     tarif4h: 9.6,
-    yLatitude: 48.8566,
-    xLongitude: 2.3522,
+    xLongitude: 5.7169,
+    yLatitude: 45.1910,
   };
 
   const dummyData = [                                        //replace with GET /:id/places the map function
@@ -213,13 +214,15 @@ const ParkingView = () => {
   return (
     <div className="pt-20 min-h-screen">
       <div
-        className="pt-16 pb-24 overflow-y-auto"
+        className="pt-10 pb-24 overflow-y-auto"
         style={{
           height: "calc(100vh - 80px)",
         }}
       >
         <ReservationDetailsModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} reservationDetails={reservationDetails} onConfirm={handleConfirmReservation} />
         <div className="p-6">
+        <div className="flex flex-row justify-between">
+          <div className="flex-col">
           <label className="text-left text-3xl font-bold text-black mb-6 bloc">
             {parkingDetails.nom}
           </label>
@@ -228,7 +231,7 @@ const ParkingView = () => {
               return <InfoField key={index} {...field} />
             })}
           </div>
-          {preSelectedFields && <div className="mb-10 w-1/2 flex flex-row pl-0 gap-4">
+          {preSelectedFields && <div className="mb-10 flex flex-row pl-0 gap-4">
             {preSelectedFields.map((field, index) => {
               return (
                 <div className="flex-1" key={index}>
@@ -250,6 +253,12 @@ const ParkingView = () => {
               );
             })}
           </div>}
+          </div>
+          <div
+      className="top-0 right-0 rounded-lg shadow-xl m-4 w-[800px] h-[300px]" >
+        <LeafletMap locations={[{nom: parkingDetails.nom, marker: [parkingDetails.yLatitude, parkingDetails.xLongitude]}]} locationClicked={parkingDetails.nom} oneLoc={true}/>
+    </div>
+          </div>
 
           <div className="flex items-start">
             <div className="flex flex-col w-full">
@@ -288,7 +297,7 @@ const ParkingView = () => {
                       title: "bg-transparent text-slate-500 font-semibold",
                       base: "bg-transparent",
                       content: "bg-transparent",
-                      heading: 'bg-white rounded-2xl px-14 shadow-lg' 
+                      heading: 'bg-white rounded-2xl px-14 shadow-lg m-4' 
                 }} >
                       <PlaceSelector
                         places={placesAvailable.filter((place) => place.etage === parseInt(etage.value))}

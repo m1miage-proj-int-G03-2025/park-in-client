@@ -20,7 +20,7 @@ const PlaceSelector = (props: PlaceSelectorProps) => {
 
 
   return (
-    <div className="flex flex-col gap-6 my-10 mx-2">
+    <div className="flex flex-col gap-6 my-5 mx-2">
       {Object.entries(groupedPlaces).map(([aille, places]) => (
         <div key={aille} className="flex items-center gap-4">
           <div className="font-bold text-lg text-primary align-middle whitespace-nowrap">

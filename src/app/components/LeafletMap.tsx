@@ -6,30 +6,32 @@ import LeafletMarker from "./LeafletMarker";
 export interface Marker {
     nom: string;
     marker: [number, number];
+    oneLoc?: boolean;
 }
 
 interface LeafletMapProps {
     locations: Marker[];
     locationClicked: string
+    oneLoc?: boolean;
 }
 
-export default function LeafletMap({ locations, locationClicked }: LeafletMapProps) {
+export default function LeafletMap({ locations, locationClicked, oneLoc }: LeafletMapProps) {
     const popupRefs = useRef<(L.Popup | null)[]>([]);
     const [indexClicked, setIndexClicked] = useState<number>();
 
     const handleMapCenter = (): [number, number] => {
         const centerLat = locations.reduce((acc, current) => acc + current.marker[0], 0) / locations.length;
         const centerLong = locations.reduce((acc, current) => acc + current.marker[1], 0) / locations.length;
-        return [centerLat, centerLong];
+        return oneLoc? locations[0].marker : [centerLat, centerLong];
     }
 
     useEffect(() => {
         const handleLocationClicked = (nomParking: string) => {
             const index = locations.findIndex(location => location.nom === nomParking);
-            setIndexClicked(index);
+            setIndexClicked(oneLoc? 0 : index);
         }
 
-        handleLocationClicked(locationClicked)
+         handleLocationClicked(locationClicked)
       }, [locationClicked, locations]);
 
     return (
@@ -39,7 +41,8 @@ export default function LeafletMap({ locations, locationClicked }: LeafletMapPro
                 url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
             />
             {
-                locations.map((location, index) => (
+               oneLoc? <LeafletMarker position={locations[0].marker} nom={locations[0].nom} popupRefs={popupRefs} indexClicked={0} index={0} oneLoc={true}/>
+               :locations.map((location, index) => (
                     <LeafletMarker key={index} index={index} position={location.marker} nom={location.nom} popupRefs={popupRefs} indexClicked={indexClicked!}/>
                 ))
             }
