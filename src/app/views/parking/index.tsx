@@ -65,7 +65,7 @@ const ParkingView = () => {
         label: "Date de début",
         placeholder: "Date de début",
         disabled: true,
-        inputType: "datetime-local" as "datetime-local",
+        inputType: "datetime-local" as const,
         value: reservationInfo.date,
         iconName: "MdCalendarToday",
         labelColor: colors.main,
@@ -74,7 +74,7 @@ const ParkingView = () => {
       {
         label: "Durée",
         placeholder: "Durée de location",
-        inputType: "select" as "select",
+        inputType: "select" as const,
         value: reservationInfo.duree,
         options: timeOpts,
         iconName: "MdSchedule",

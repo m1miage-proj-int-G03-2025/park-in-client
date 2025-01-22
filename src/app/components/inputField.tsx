@@ -1,9 +1,9 @@
 import Icon from "@/components/icon";
 import { colors } from "@/constants/colors";
-import { Autocomplete, AutocompleteItem, DatePicker, Input, input, Select, SelectItem } from "@heroui/react";
+import { Autocomplete, AutocompleteItem, DatePicker, Input, Select, SelectItem } from "@heroui/react";
 import React, { useMemo } from "react";
 import * as MaterialIcons from "react-icons/md";
-import { fromDate, getLocalTimeZone, now, parseDate } from '@internationalized/date';
+import { fromDate, getLocalTimeZone, now } from '@internationalized/date';
 
 interface InputFieldProps {
   label: string;
@@ -31,7 +31,7 @@ const InputField = (props: InputFieldProps) => {
     onChange = () => {},
     error = false,
     disabled = false,
-    labelColor = "black",
+    labelColor = "while",
     iconColor = colors.main,
     required = false
   } = props;
@@ -80,18 +80,18 @@ const InputField = (props: InputFieldProps) => {
         case "datetime-local": {
             return (
                 <div>
-                <span className="text-white !bg-transparent font-bold margin-bottom-10 text-lg">{label}</span>
+                <span className="text-white !bg-transparent font-bold margin-bottom-10 text-lg" style={{color: labelColor}}>{label}</span>
                 <DatePicker
                 minValue={now(getLocalTimeZone())}
                 hideTimeZone
                 showMonthAndYearPickers
                 className="bg-white rounded-lg shadow-lg p-0 m-0"
-                value={fromDate(value instanceof Date ? value : new Date(), 'UTC') as any}
+                value={fromDate(value instanceof Date ? value : new Date(), 'UTC')}
                 size="lg"
                 isRequired={required}
                 isInvalid={error}
                 errorMessage={errorMessage}
-                onChange={(value) => handleInputChange(value?.toDate('UTC') as Date)}
+                onChange={(value) => handleInputChange(value!.toDate() as Date)}
                 color="primary"
                 isDisabled={disabled}
                 startContent={iconName ? <Icon name={iconName} color="primary" /> : null}
