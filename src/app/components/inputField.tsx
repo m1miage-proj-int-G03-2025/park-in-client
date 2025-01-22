@@ -11,13 +11,14 @@ interface InputFieldProps {
   placeholder: string;
   inputType?: "text" | "datetime-local" | "select" | "auto-complete";
   options?: { label: string; value: string }[];
-  value: string | Date ;
+  value: string | Date | null;
   onChange?: (value: string | Date) => void;
   error?: boolean;
   disabled?: boolean;
   labelColor?: string
   iconColor?: string,
   required?: boolean
+  onInputChange?: (value: string) => void;
 }
 
 const InputField = (props: InputFieldProps) => {
@@ -33,33 +34,33 @@ const InputField = (props: InputFieldProps) => {
     disabled = false,
     labelColor = "white",
     iconColor = colors.main,
-    required = false
+    required = false,
+    onInputChange = () => {},
   } = props;
 
   const handleInputChange = (
       event: React.ChangeEvent<HTMLInputElement | HTMLSelectElement> | Date | string
     ) => {
-      console.log(event)
-      if (inputType === "datetime-local") {
-        console.log('it is')
-        onChange(event as Date); 
-      } else {
-        if (event instanceof Date) {
-          onChange(event);
-        } else {
-          if(inputType === "auto-complete") {
-            onChange(event as unknown as string);
+      switch (inputType) {
+        case "datetime-local":
+          onChange(event as Date);
+          break;
+        case "auto-complete":
+          onChange(event as unknown as string);
+          break;
+        default:
+          if (event instanceof Date) {
+        onChange(event);
+          } else if (typeof event !== 'string') {
+        const target = event.target as HTMLInputElement | HTMLSelectElement;
+        onChange(target.value);
           } else {
-          if (typeof event !== 'string') {
-            const target = event.target as HTMLInputElement | HTMLSelectElement;
-            onChange(target.value as string);
+        onChange(event);
           }
-          }
-        }
+          break;
       }
     };
-
-    console.log(value)
+    console.log(value);
 
   const errorMessage = useMemo(() => {
     return error ? "Veuillez remplir ce champ" : null;
@@ -74,15 +75,15 @@ const InputField = (props: InputFieldProps) => {
                     label={<span className="text-white font-bold bg-transparent 16px text-lg" style={{
                       color: labelColor
                     }}>{label}</span>}
-                    disabled={disabled}
+                    isDisabled={disabled}
                     size="lg"
                     placeholder={placeholder}
                     required={required}
-                    value={value as string}
+                    defaultSelectedKeys={[value as string]}
                     onChange={handleInputChange}
                     errorMessage={errorMessage}
                     isInvalid={error}
-                    startContent={iconName ? <Icon name={iconName} color={iconColor} /> : null}
+                    startContent={iconName ? <Icon name={iconName} color={disabled? "grey": colors.main} /> : null}
                     aria-label="transparent"
                     labelPlacement="outside"
                 >
@@ -97,12 +98,12 @@ const InputField = (props: InputFieldProps) => {
             return (
                 <div>
                 <span className="text-white !bg-transparent font-bold margin-bottom-10 text-lg" style={{
-                  color: labelColor
+                  color: disabled? '#95BBE1': labelColor
                 }}>{label}</span>
                 <DatePicker
                 hideTimeZone
                 granularity="minute"
-                minValue={today(getLocalTimeZone())}
+                minValue={typeof window === undefined? today(getLocalTimeZone()): today(getLocalTimeZone())}
                 className="bg-white rounded-lg shadow-lg p-0 m-0"
                 value={
                   value instanceof Date && !isNaN(value.getTime())
@@ -114,13 +115,12 @@ const InputField = (props: InputFieldProps) => {
                 isInvalid={error}
                 errorMessage={errorMessage}
                 onChange={(newValue) => {
-                  console.log('new Value:' + newValue)
                   if (newValue) {
                     const selectedDate = newValue.toDate();
                     handleInputChange(selectedDate);
                   }
                 }}
-                color="primary"
+                color={disabled? "default": "primary"}
                 isDisabled={disabled}
                 startContent={iconName ? <Icon name={iconName} color="primary" /> : null}
                 labelPlacement="outside"
@@ -149,12 +149,8 @@ const InputField = (props: InputFieldProps) => {
                 isInvalid={error}
                 isDisabled={disabled}
                 value={value as string}
-                onSelectionChange={(val) => {
-                  const selectedOption = options.find(option => option.value === val);
-                  if (selectedOption) {
-                    handleInputChange(selectedOption.label);
-                  }
-                }}
+                onInputChange={onInputChange}
+                onSelectionChange={(key) => handleInputChange(key as string)}
                 errorMessage={errorMessage}
                 startContent={iconName ? <Icon name={iconName} color={iconColor} /> : null}
                 labelPlacement="outside"
