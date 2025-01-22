@@ -24,7 +24,7 @@ export default function SignInWithGoogle({onLogin}: SignInWithGoogleProps) {
         <div className="flex flex-col">
             <div>
                 <Button 
-                    className="max-w-xs w-72 font-medium" 
+                    className="max-w-xs w-72 font-medium border-slate-400" 
                     variant="bordered"
                     size="lg"
                     onPress={handleLogin}

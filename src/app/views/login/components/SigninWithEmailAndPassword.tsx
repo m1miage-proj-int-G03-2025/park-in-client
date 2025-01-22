@@ -50,7 +50,7 @@ export default function SignInWithEmailAndPassword({onLogin}: SignInWithEmailAnd
                 <div className="flex flex-col my-2">
                     <Input
                         isRequired
-                        className="max-w-xs w-72"
+                        className="max-w-xs w-72 border-slate-400"
                         errorMessage="Mot de passe invalide"
                         isInvalid={invalid}
                         label="Mot de passe"
@@ -69,7 +69,7 @@ export default function SignInWithEmailAndPassword({onLogin}: SignInWithEmailAnd
                 </div>
 
                 <div>
-                    <Button type="submit" className="w-72" color="primary">Connexion</Button>
+                    <Button type="submit" className="w-72 text-white" color="primary">Connexion</Button>
                 </div>
             </Form>
         </div>
