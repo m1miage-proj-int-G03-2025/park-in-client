@@ -1,10 +1,7 @@
-interface WaveElementProps {
-    size: string
-}
-const WaveElement = (props: WaveElementProps) => {
-    const {size} = props
+const WaveElement = () => {
+    
     return (
-        <div className={`absolute bottom-0 left-0 w-full h-[${size}px]`}>
+      <div className={`absolute bottom-0 z-0 left-0 w-full h-[250px]`}>
         <svg
           className="w-full h-full"
           xmlns="http://www.w3.org/2000/svg"
