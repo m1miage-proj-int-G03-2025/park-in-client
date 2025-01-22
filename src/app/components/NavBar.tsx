@@ -1,12 +1,12 @@
 'use client';
 import { Button } from "@heroui/button";
-import { Link } from "@heroui/link";
 import { useRouter } from 'next/navigation';
 import LogoParkin from "./logoParkin";
 import { useAuth } from "@/providers/AuthProvider";
 import LoggedUserInfo from "./loggedUserInfo";
 import { signOut } from "firebase/auth";
 import { auth } from "@/configs/firebaseConfig";
+import Link from "next/link";
 
 const navs = [
     {name: "Accueil", link: "/", requiresLogin: false}, 
@@ -27,8 +27,8 @@ export default function NavBar() {
     };
 
     return(
-        <div className="fixed w-screen bg-white">
-            <div className="flex justify-between items-center py-2 px-6 shadow-xl">
+        <div className="fixed w-screen bg-white z-20 shadow-md">
+            <div className="flex justify-between items-center py-2 px-6">
                 <div>
                     <LogoParkin width={70} size="2xl"/>
                 </div>
@@ -36,7 +36,7 @@ export default function NavBar() {
                     {
                         navs.filter(nav => !nav.requiresLogin || (nav.requiresLogin && user != null))
                             .map((nav, index) => (
-                                <div key={index} className="mx-6"><Link color="foreground" href={`/${nav.link}`}>{nav.name}</Link></div>
+                                <div key={index} className="mx-6"><Link className="text-black" href={`/${nav.link}`}>{nav.name}</Link></div>
                             ))
                     }
                 </div>

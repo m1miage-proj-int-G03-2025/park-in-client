@@ -127,7 +127,7 @@ const handleRechercheClick = () => {
         </svg>
       </div>
       <div className="relative w-[1024px] z-10 flex flex-col items-center h-2/3">
-       <span className="mb-7 font-semibold text-3xl text-white items-center">Recherchez Des Parkings</span>
+       <span className="mb-7 font-semibold text-3xl text-white items-center">Recherchez des parkings</span>
        <div className="items-center mb-5">
        <span className="font-normal text-xl text-white items-center">-Trouver une place de parking n`a jamais été aussi simple-</span>
        </div>

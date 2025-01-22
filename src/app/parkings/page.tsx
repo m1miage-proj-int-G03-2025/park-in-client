@@ -1,14 +1,15 @@
 "use client"
 
+import ParkingsView, { ParkingsParams } from "@/views/parkings";
 import { useSearchParams } from "next/navigation";
 
 const Parkings = () => {
     const searchParams = useSearchParams();
-    const searchQuery = searchParams.get('searchQuery');
-    console.log(searchQuery);
+    const searchQuery: ParkingsParams = JSON.parse(searchParams.get('searchQuery')!);
+
     return (
         <div>
-            Parkings
+            <ParkingsView {...searchQuery} />
         </div>
     );
 }
