@@ -7,12 +7,13 @@ import { timeOpts } from "@/constants/timeOpts";
 import { Button } from "@heroui/react";
 import { useRouter } from "next/navigation";
 import InputField from "@/components/inputField";
+import axios from "axios";
 
 const RechercheParkingView = () => {
   const route = useRouter()
   const [reservationInfo, setReservationInfo] = useState({
     addresse: "",
-    date: new Date(),
+    date: typeof window === 'undefined' ? new Date() : null,
     duree: "",
     typeVoiture: "",
   });
@@ -23,19 +24,19 @@ const RechercheParkingView = () => {
     typeVoiture: false,
   });
 
-  const villes = [
-      {label: "Paris", value: "0"},
-      {label: "Lyon", value: "1"},
-      {label: "Marseille", value: "2"},
-      {label: "Toulouse", value: "3"},
-      {label: "Nice", value: "4"},
-      {label: "Nantes", value: "5"},
-      {label: "Montpellier", value: "6"},
-  ];
+  const [villes, setVilles] = useState<Array<{ label: string; value: string }>>([])
 
-  const slogan = "-Trouver une place de parking n'a jamais été aussi simple-"
+  const handleInputChange = (val: string) => {
+    axios.get(`https://geo.api.gouv.fr/communes?nom=${val}&fields=departement&boost=population&limit=5`).then(({data}) => {
+      setVilles(data?.map((item: { nom: string; code: string }) => ({
+        label: item.nom,
+        value: item.code,
+      })))
+    })   
+  }
 
   const handleSelection = (key: string, value: string | Date) => {
+    console.log(value);
     setErrors((prev) => {
       return {
         ...prev,
@@ -50,6 +51,8 @@ const RechercheParkingView = () => {
       };
     });
   };
+
+
 const handleRechercheClick = () => {
     if(!reservationInfo.addresse || !reservationInfo.date || !reservationInfo.duree || !reservationInfo.typeVoiture) {
       const newError = {
@@ -71,7 +74,7 @@ const handleRechercheClick = () => {
     iconName?: keyof typeof MaterialIcons;
     inputType?: "text" | "datetime-local" | "select";
     placeholder: string;
-    value: string | Date;
+    value: string | Date | null;
     onChange: (value: string | Date ) => void;
     options?: { label: string; value: string }[];
     error?: boolean;
@@ -106,7 +109,7 @@ const handleRechercheClick = () => {
         error: errors.typeVoiture,
       },
     ];
-  }, [reservationInfo, errors]);
+  }, [reservationInfo, errors, villes]);
 
   return (
     <div className="w-full min-h-screen flex flex-col items-center justify-center bg-transparent overflow-hidden">
@@ -126,7 +129,7 @@ const handleRechercheClick = () => {
       <div className="relative w-[1024px] z-10 flex flex-col items-center h-2/3">
        <span className="mb-7 font-semibold text-3xl text-white items-center">Recherchez des parkings</span>
        <div className="items-center mb-5">
-       <span className="font-normal text-xl text-white items-center">{slogan}</span>
+       <span className="font-normal text-xl text-white items-center">-Trouver une place de parking n`a jamais été aussi simple-</span>
        </div>
         <div className="flex items-center justify-center gap-4 p-4 mb-5 w-[550px]">
           <div className="flex-1">
@@ -139,6 +142,7 @@ const handleRechercheClick = () => {
               value={reservationInfo.addresse}
               onChange={(value) => handleSelection("addresse", value)}
               error={errors.addresse}
+              onInputChange={handleInputChange}
             />
           </div>
         </div>

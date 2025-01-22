@@ -3,7 +3,7 @@ import { colors } from "@/constants/colors";
 import { Autocomplete, AutocompleteItem, DatePicker, Input, Select, SelectItem } from "@heroui/react";
 import React, { useMemo } from "react";
 import * as MaterialIcons from "react-icons/md";
-import { fromDate, getLocalTimeZone, now } from '@internationalized/date';
+import { fromDate, getLocalTimeZone, today, toZoned } from '@internationalized/date';
 
 interface InputFieldProps {
   label: string;
@@ -11,13 +11,14 @@ interface InputFieldProps {
   placeholder: string;
   inputType?: "text" | "datetime-local" | "select" | "auto-complete";
   options?: { label: string; value: string }[];
-  value: string | Date ;
+  value: string | Date | null;
   onChange?: (value: string | Date) => void;
   error?: boolean;
   disabled?: boolean;
   labelColor?: string
   iconColor?: string,
   required?: boolean
+  onInputChange?: (value: string) => void;
 }
 
 const InputField = (props: InputFieldProps) => {
@@ -31,24 +32,38 @@ const InputField = (props: InputFieldProps) => {
     onChange = () => {},
     error = false,
     disabled = false,
-    labelColor = "while",
+    labelColor = "white",
     iconColor = colors.main,
-    required = false
+    required = false,
+    onInputChange = () => {},
   } = props;
 
   const handleInputChange = (
-      event: React.ChangeEvent<HTMLInputElement | HTMLSelectElement> | Date 
+      event: React.ChangeEvent<HTMLInputElement | HTMLSelectElement> | Date | string
     ) => {
-      if (inputType === "datetime-local" && event instanceof Date) {
-        onChange(event); 
-      } else if (event instanceof Event) {
+      switch (inputType) {
+        case "datetime-local":
+          onChange(event as Date);
+          break;
+        case "auto-complete":
+          onChange(event as unknown as string);
+          break;
+        default:
+          if (event instanceof Date) {
+        onChange(event);
+          } else if (typeof event !== 'string') {
         const target = event.target as HTMLInputElement | HTMLSelectElement;
-        onChange(target.value); 
+        onChange(target.value);
+          } else {
+        onChange(event);
+          }
+          break;
       }
     };
+    console.log(value);
 
   const errorMessage = useMemo(() => {
-    return error ? "Veuillez remplir ce champ" : "";
+    return error ? "Veuillez remplir ce champ" : null;
   }, [error])
 
   const inputComponent = useMemo(() => {
@@ -57,16 +72,18 @@ const InputField = (props: InputFieldProps) => {
             return (
                 <Select
                     className="bg-white rounded-lg shadow-lg p-0 m-0"
-                    label={<span className="text-white font-bold bg-transparent 16px text-lg">{label}</span>}
-                    disabled={disabled}
+                    label={<span className="text-white font-bold bg-transparent 16px text-lg" style={{
+                      color: labelColor
+                    }}>{label}</span>}
+                    isDisabled={disabled}
                     size="lg"
                     placeholder={placeholder}
                     required={required}
-                    value={value as string}
+                    defaultSelectedKeys={[value as string]}
                     onChange={handleInputChange}
                     errorMessage={errorMessage}
                     isInvalid={error}
-                    startContent={iconName ? <Icon name={iconName} color={iconColor} /> : null}
+                    startContent={iconName ? <Icon name={iconName} color={disabled? "grey": colors.main} /> : null}
                     aria-label="transparent"
                     labelPlacement="outside"
                 >
@@ -80,19 +97,30 @@ const InputField = (props: InputFieldProps) => {
         case "datetime-local": {
             return (
                 <div>
-                <span className="text-white !bg-transparent font-bold margin-bottom-10 text-lg" style={{color: labelColor}}>{label}</span>
+                <span className="text-white !bg-transparent font-bold margin-bottom-10 text-lg" style={{
+                  color: disabled? '#95BBE1': labelColor
+                }}>{label}</span>
                 <DatePicker
-                minValue={now(getLocalTimeZone())}
                 hideTimeZone
-                showMonthAndYearPickers
+                granularity="minute"
+                minValue={typeof window === undefined? today(getLocalTimeZone()): today(getLocalTimeZone())}
                 className="bg-white rounded-lg shadow-lg p-0 m-0"
-                value={fromDate(value instanceof Date ? value : new Date(), 'UTC')}
+                value={
+                  value instanceof Date && !isNaN(value.getTime())
+                    ? toZoned(fromDate(value, getLocalTimeZone()), getLocalTimeZone())
+                    : toZoned(fromDate(new Date(), getLocalTimeZone()), getLocalTimeZone())
+                }
                 size="lg"
                 isRequired={required}
                 isInvalid={error}
                 errorMessage={errorMessage}
-                onChange={(value) => handleInputChange(value!.toDate() as Date)}
-                color="primary"
+                onChange={(newValue) => {
+                  if (newValue) {
+                    const selectedDate = newValue.toDate();
+                    handleInputChange(selectedDate);
+                  }
+                }}
+                color={disabled? "default": "primary"}
                 isDisabled={disabled}
                 startContent={iconName ? <Icon name={iconName} color="primary" /> : null}
                 labelPlacement="outside"
@@ -107,7 +135,9 @@ const InputField = (props: InputFieldProps) => {
             return (
               <div>
               <div className="mb-0.5 mt-1">
-              <span className="text-white !bg-transparent font-bold margin-bottom-10 text-lg">{label}</span>
+              <span className="text-white !bg-transparent font-bold margin-bottom-10 text-lg" style={{
+                color: labelColor
+              }}>{label}</span>
               </div>
                 <Autocomplete
                 className="bg-white rounded-lg shadow-lg p-0 m-0"
@@ -119,7 +149,8 @@ const InputField = (props: InputFieldProps) => {
                 isInvalid={error}
                 isDisabled={disabled}
                 value={value as string}
-                onChange={handleInputChange}
+                onInputChange={onInputChange}
+                onSelectionChange={(key) => handleInputChange(key as string)}
                 errorMessage={errorMessage}
                 startContent={iconName ? <Icon name={iconName} color={iconColor} /> : null}
                 labelPlacement="outside"
@@ -157,7 +188,7 @@ const InputField = (props: InputFieldProps) => {
         }
     }
 
-  }, [inputType])
+  }, [inputType, value, error, disabled, label, iconName, placeholder, options, handleInputChange, errorMessage, required, iconColor])
 
   return (
     inputComponent
