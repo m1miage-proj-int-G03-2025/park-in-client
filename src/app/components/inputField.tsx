@@ -61,7 +61,6 @@ const InputField = (props: InputFieldProps) => {
         break;
     }
   };
-  console.log(value);
 
   const errorMessage = useMemo(() => {
     return error ? "Veuillez remplir ce champ" : null;

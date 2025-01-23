@@ -25,10 +25,21 @@ export function Parkings({data, onParkingSelected}: ParkingsProps) {
 
     return (
         <div className="w-screen h-screen max-h-screen flex">
-            <div className="w-1/2 px-4 overflow-y-auto mt-24">
-                <div className="mb-8">
-                    <span className="text-2xl font-semibold">{parkings.length} parkings disponibles</span>
-                </div>
+            <div className="w-[50%] px-4 overflow-y-auto mt-24">
+                    {
+                        parkings.length > 0 
+                            ? (
+                                <div className="mb-8">
+                                    <span className="text-2xl font-semibold">{parkings.length} parkings disponibles</span>
+                                </div>
+                            )
+                            : (
+                                <div className="mt-28 ml-14">
+                                    <span className="text-3xl font-semibold mt-24">Pas de parking disponible</span>
+                                </div>
+                            )
+                            
+                    }
                 <div>
                     {
                         parkings.map((parking, index) => (
@@ -41,9 +52,16 @@ export function Parkings({data, onParkingSelected}: ParkingsProps) {
                     }
                 </div>
             </div>
-            <div className="w-1/2 h-screen mt-24">
-                <LeafletMap locations={markers} locationClicked={nomParking} />
+            <div className="mt-24 flex w-[50%] px-2">
+                {
+                    parkings.length > 0 && <LeafletMap locations={markers} locationClicked={nomParking} />
+                }
             </div>
+            {/* <div className="w-[500px] h-screen mt-24 px-2">
+                {
+                    parkings.length > 0 && <LeafletMap locations={markers} locationClicked={nomParking} />
+                }
+            </div> */}
         </div>
     )
     

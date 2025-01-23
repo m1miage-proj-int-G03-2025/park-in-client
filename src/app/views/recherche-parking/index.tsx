@@ -12,13 +12,13 @@ import axios from "axios";
 const RechercheParkingView = () => {
   const route = useRouter()
   const [reservationInfo, setReservationInfo] = useState({
-    addresse: "",
+    inseeVille: "",
     date: typeof window === 'undefined' ? new Date() : null,
     duree: "",
     typeVoiture: "",
   });
   const [errors, setErrors] = useState({
-    addresse: false,
+    inseeVille: false,
     date: false,
     duree: false,
     typeVoiture: false,
@@ -55,9 +55,9 @@ const RechercheParkingView = () => {
 
 
 const handleRechercheClick = () => {
-    if(!reservationInfo.addresse || !reservationInfo.date || !reservationInfo.duree || !reservationInfo.typeVoiture) {
+    if(!reservationInfo.inseeVille || !reservationInfo.date || !reservationInfo.duree || !reservationInfo.typeVoiture) {
       const newError = {
-        addresse: !reservationInfo.addresse,
+        inseeVille: !reservationInfo.inseeVille,
         date: !reservationInfo.date,
         duree: !reservationInfo.duree,
         typeVoiture: !reservationInfo.typeVoiture,
@@ -140,9 +140,9 @@ const handleRechercheClick = () => {
               inputType="auto-complete"
               options={villes}
               placeholder="Indiquez votre emplacement"
-              value={reservationInfo.addresse}
-              onChange={(value) => handleSelection("addresse", value)}
-              error={errors.addresse}
+              value={reservationInfo.inseeVille}
+              onChange={(value) => handleSelection("inseeVille", value)}
+              error={errors.inseeVille}
               onInputChange={handleInputChange}
             />
           </div>
