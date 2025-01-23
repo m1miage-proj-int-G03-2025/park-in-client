@@ -8,7 +8,6 @@ export default function LoginView() {
     const router = useRouter();
     const searchParams = useSearchParams();
     const searchQuery = searchParams.get('searchQuery');
-    console.log(searchQuery)
     const handleLogin = () => {
         if(searchQuery) {
             //send post request to backend

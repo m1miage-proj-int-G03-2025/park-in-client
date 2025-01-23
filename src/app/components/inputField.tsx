@@ -46,6 +46,7 @@ const InputField = (props: InputFieldProps) => {
         onChange(event as Date);
         break;
       case "auto-complete":
+        console.log(event)
         onChange(event as unknown as string);
         break;
       default:
@@ -151,7 +152,7 @@ const InputField = (props: InputFieldProps) => {
               isDisabled={disabled}
               value={value as string}
               onInputChange={onInputChange}
-              onSelectionChange={(key) => handleInputChange(key as string)}
+              onSelectionChange={(val) => handleInputChange(val as string)}
               errorMessage={errorMessage}
               startContent={iconName ? <Icon name={iconName} color={iconColor} /> : null}
               labelPlacement="outside"
@@ -159,7 +160,7 @@ const InputField = (props: InputFieldProps) => {
                 isEnabled: true,
               }}
             >
-              {options?.map((opt, index) => <AutocompleteItem key={index}>{opt.label}</AutocompleteItem>)}
+              {options?.map((opt) => <AutocompleteItem key={opt.value}>{opt.label}</AutocompleteItem>)}
             </Autocomplete>
           </div>
         )
