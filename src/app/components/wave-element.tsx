@@ -1,7 +1,7 @@
 const WaveElement = () => {
     
     return (
-      <div className={`absolute bottom-0 z-0 left-0 w-full h-[250px]`}>
+      <div className={`absolute bottom-0 z-0 left-0 w-full h-[250px] 2xl:h-[300px]`}>
         <svg
           className="w-full h-full"
           xmlns="http://www.w3.org/2000/svg"
