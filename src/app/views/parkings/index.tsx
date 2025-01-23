@@ -6,14 +6,15 @@ import ParkingSkeleton from "./components/ParkingSkeleton";
 import { useRouter } from "next/navigation";
 
 export interface ParkingsParams {
-    ville: string;
+    inseeVille: string;
     date: Date;
     duree: number;
     typeVoiture: string;
 }
 
 export default function ParkingsView(params: ParkingsParams) {
-    const parkings = searchParkings();
+    const parkings = searchParkings(params);
+    
     const router = useRouter();
     const handleParkingSelected = (parkingId: string) => {
         const queryString = encodeURIComponent(JSON.stringify(params));
