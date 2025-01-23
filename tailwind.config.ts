@@ -16,6 +16,7 @@ export default {
         primary: "#2b77c4",
         secondary: "#3e9247",
         default: "#FFFFFF",
+        error: "#ff0000"
       },
     },
   },

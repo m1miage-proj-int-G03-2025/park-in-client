@@ -1,4 +1,8 @@
+"use client"
+import ReservationsListView from "@/views/reservations-list";
+
+
 const ReservationsPage = () => {
-    return <div>Reservations</div>
+    return <ReservationsListView />
 }
 export default ReservationsPage;

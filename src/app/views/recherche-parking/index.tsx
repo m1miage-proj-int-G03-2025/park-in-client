@@ -36,6 +36,8 @@ const RechercheParkingView = () => {
     })   
   }
 
+  console.log(villes);
+
   const handleSelection = (key: string, value: string | Date) => {
     console.log(value);
     setErrors((prev) => {
