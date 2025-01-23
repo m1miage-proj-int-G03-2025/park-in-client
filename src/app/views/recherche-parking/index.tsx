@@ -24,6 +24,7 @@ const RechercheParkingView = () => {
     typeVoiture: false,
   });
 
+
   const [villes, setVilles] = useState<Array<{ label: string; value: string }>>([])
 
   const handleInputChange = (val: string) => {

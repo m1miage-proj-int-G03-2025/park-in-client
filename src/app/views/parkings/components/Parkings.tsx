@@ -1,7 +1,7 @@
 "use client";
 import { use, useState } from "react";
 import Parking, { ParkingData } from "./Parking";
-import LeafletMap, { Marker } from "@/views/parkings/components/LeafletMap";
+import LeafletMap, { Marker } from "@/components/LeafletMap";
 
 interface ParkingsProps {
     data: Promise<ParkingData[]>;
