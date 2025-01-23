@@ -130,12 +130,12 @@ const handleRechercheClick = () => {
       <div className="relative w-[1024px] z-10 flex flex-col items-center h-2/3">
        <span className="mb-7 font-semibold text-3xl text-white items-center">Recherchez des parkings</span>
        <div className="items-center mb-5">
-       <span className="font-normal text-xl text-white items-center">-Trouver une place de parking n`a jamais été aussi simple-</span>
+       <span className="font-normal text-xl 2xl:text-3xl text-white items-center">Trouver une place de parking n`a jamais été aussi simple</span>
        </div>
         <div className="flex items-center justify-center gap-4 p-4 mb-5 w-[550px]">
           <div className="flex-1">
             <InputField
-              label="Adresse"
+              label="Ville"
               iconName="MdLocationOn"
               inputType="auto-complete"
               options={villes}

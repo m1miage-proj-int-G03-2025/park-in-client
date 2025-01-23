@@ -5,11 +5,10 @@ import LeafletMap, { Marker } from "@/components/LeafletMap";
 
 interface ParkingsProps {
     data: Promise<ParkingData[]>;
-    adresse: string;
     onParkingSelected: (parkingId: string) => void;
 }
 
-export function Parkings({data, adresse, onParkingSelected}: ParkingsProps) {
+export function Parkings({data, onParkingSelected}: ParkingsProps) {
     const parkings = use(data);
     const markers = parkings.map(parking => {
         return {
@@ -28,7 +27,7 @@ export function Parkings({data, adresse, onParkingSelected}: ParkingsProps) {
         <div className="w-screen h-screen max-h-screen flex">
             <div className="w-1/2 px-4 overflow-y-auto mt-24">
                 <div className="mb-8">
-                    <span className="text-2xl font-semibold">{parkings.length} parkings disponibles à {adresse}</span>
+                    <span className="text-2xl font-semibold">{parkings.length} parkings disponibles</span>
                 </div>
                 <div>
                     {
@@ -42,7 +41,7 @@ export function Parkings({data, adresse, onParkingSelected}: ParkingsProps) {
                     }
                 </div>
             </div>
-            <div className="w-1/2 h-screen">
+            <div className="w-1/2 h-screen mt-24">
                 <LeafletMap locations={markers} locationClicked={nomParking} />
             </div>
         </div>

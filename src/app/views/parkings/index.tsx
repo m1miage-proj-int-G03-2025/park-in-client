@@ -6,7 +6,7 @@ import ParkingSkeleton from "./components/ParkingSkeleton";
 import { useRouter } from "next/navigation";
 
 export interface ParkingsParams {
-    addresse: string;
+    ville: string;
     date: Date;
     duree: number;
     typeVoiture: string;
@@ -23,7 +23,7 @@ export default function ParkingsView(params: ParkingsParams) {
     return (
         <div className="min-h-screen pt-26">
             <Suspense fallback={<ParkingSkeleton />}>
-                <Parkings data={parkings} adresse={params.addresse} onParkingSelected={(parkingId) => handleParkingSelected(parkingId)} />
+                <Parkings data={parkings} onParkingSelected={(parkingId) => handleParkingSelected(parkingId)} />
             </Suspense>
         </div>
     );

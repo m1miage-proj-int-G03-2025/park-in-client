@@ -10,7 +10,7 @@ import { Button } from "@heroui/react";
 
 export const reservation = {
     idReservation: 12345,
-    statut: "annulé",
+    statut: "confirmé",
     tarif: 15.0,
     dateDebut: "2025-01-22T09:00:00Z",
     dateFin: "2025-01-22T17:00:00Z",
@@ -41,7 +41,7 @@ export default function ReservationView() {
                                     <DetailsInfo title="Type de place" value={details.typePlace} className="w-44" />
                                 </div>
                                 <div className="flex mb-8 justify-between">
-                                    <DetailsInfo title="Paiement" value={details.tarif + "&euro;"} className="w-44" />
+                                    <DetailsInfo title="Paiement" value={details.tarif} currency="&euro;" className="w-44" />
                                     <DetailsInfo title="Statut" value={details.statut} className="w-44" />
                                 </div>
 
