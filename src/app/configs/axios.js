@@ -8,7 +8,7 @@ export const setupInterceptor = () => {
     axios.interceptors.request.use(
         async (config) => {
             if (typeof window !== 'undefined') {
-                const token = localStorage.getItem('token');
+                const token = await localStorage.getItem('token');
                 if (token) {
                     config.headers.Authorization = `Bearer ${token}`;
                 }

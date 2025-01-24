@@ -1,5 +1,5 @@
+import getPlaceIcon from "@/utils/place-iconname-helper";
 import SelectorCard from "./selector-card";
-import getPlaceType from "@/utils/place-icon-helper";
 
 interface PlaceSelectorProps {
   places: { numeroPlace: string; typePlace: string, aille: string, label: string }[];
@@ -36,7 +36,7 @@ const PlaceSelector = (props: PlaceSelectorProps) => {
                   isSelected={isSelected}
                   key={index}
                   onSelect={() => onSelectPlace(place.numeroPlace)}
-                  iconName={getPlaceType(place.typePlace)}
+                  iconName={getPlaceIcon(place.typePlace)}
                   label={place.label}
                   size={24}
                 />
