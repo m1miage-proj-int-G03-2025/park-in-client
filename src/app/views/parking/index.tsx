@@ -1,5 +1,5 @@
 "use client";
-import { Suspense, useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import PlaceSelector from "./components/place-selector";
 import TypePlaceSelector from "./components/type-place-selector";
 import InputField from "@/components/inputField";
@@ -18,7 +18,6 @@ import { useLoading } from "@/contexts/loadingContext";
 import { getTypeVoitureByKey } from "@/utils/enum-key-helper";
 import dynamic from "next/dynamic";
 import { useUserContext } from "@/providers/UserProvider";
-import { useError } from "@/contexts/errorContext";
 
 const LeafletMap = dynamic(() => import('@/components/LeafletMap'), {
   ssr: false,
