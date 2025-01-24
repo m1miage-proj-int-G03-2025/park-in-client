@@ -87,6 +87,7 @@ const ParkingView = () => {
   }
 
   const handleReserve =  async() => {
+    console.log(userId)
     if (!userId) {
       throw new Error("User ID is null");
     }
@@ -101,7 +102,7 @@ const ParkingView = () => {
     setIsLoading(true)
     const reservation = await reservePlace(data)
     setIsLoading(false)
-    router.push(`reservation/${reservation.reservationId}`)
+    router.push(`/reservations/${reservation[0].id}`)
   }
 
   const handleSelect = (key: keyof typeof selectedPlace, value: string) => {
@@ -160,7 +161,7 @@ const ParkingView = () => {
       default:
         return 0;
     }
-  }, [reservationInfo.duree]);
+  }, [reservationInfo.duree, parkingDetails]);
 
   const preSelectedFields = useMemo(() => {
     return [

@@ -18,15 +18,14 @@ export default function LoginView() {
     const {user} = useAuth()
     const {setIsLoading} = useLoading()
 
-    console.log(searchQuery)
-
     const handleLogin = async () => {
         if(user?.email) {
         setIsLoading(true)
-        const {idUtilisateur} = await getUserData(user.email);
-        setUserId(idUtilisateur)
+        const data = await getUserData(user.email);
+        setUserId(data[0].idUtilisateur)
         setIsLoading(false)
         }
+
         if(searchQuery) {
             const {idPlace,date, duree, typePlace } = JSON.parse(searchQuery)
             if (userId) {
@@ -37,13 +36,15 @@ export default function LoginView() {
                     duree: duree,
                     typePlace
                 }
-                const { reservationId } = await reservePlace(data)
-                router.push(`/reservations/${reservationId}`)
+                const response = await reservePlace(data)
+                router.push(`/reservations/${response[0].id}`)
             } else {
                 console.error("User ID is null");
             }
         } else {
-            router.back()
+            if(user) {
+                router.back()
+            }
         }
     } 
 

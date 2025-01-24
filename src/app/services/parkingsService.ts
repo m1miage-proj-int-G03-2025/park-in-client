@@ -15,7 +15,7 @@ export async function searchParkings(data: ParkingsParams): Promise<ParkingData[
         heureFin,
         typeDePlace: data.typeVoiture
     };
-    return await fetchStream<unknown, ParkingData>(`${serverUrl}/parkings/`, params);
+    return await fetchStream<unknown, ParkingData, unknown>(`${serverUrl}/parkings/`, {params});
 }
 
 export async function getParkingDetails(id: string): Promise<{
@@ -43,31 +43,31 @@ export async function getPlacesDisponibles(data: { typePlace: string, dateDebut:
         dateDebut,
         dateFin,
     }
-    return await fetchStream<unknown, { numeroPlace: string, typePlace: string }>(`${serverUrl}/parkings/${data.parkingId}/places`, params);
+    return await fetchStream<unknown, { numeroPlace: string, typePlace: string }, unknown>(`${serverUrl}/parkings/${data.parkingId}/places`, {params});
 
 }
 
-export async function reservePlace(data: { numeroPlace: string, idUtilisateur: string, dateDebut: string, duree: string, idParking?: string, typePlace: string }): Promise<{ reservationId: string }> {
+export async function reservePlace(data: { numeroPlace: string, idUtilisateur: string, dateDebut: string, duree: string, idParking?: string, typePlace: string }): Promise<{ id: string }[]> {
     const heureDebut = dayjs(data.dateDebut).tz().format("YYYY-MM-DDTHH:mm:ss");
     const heureFin = dayjs(data.dateDebut).add(+data.duree, "minute").tz().format("YYYY-MM-DDTHH:mm:ss");
     if(data.numeroPlace?.length === 0) {
         const params = {
             typePlace: data.typePlace,
-            idParking: data.idParking,
-            heureDebut,
-            heureFin
+            dateDebut: heureDebut,
+            dateFin: heureFin,
           }
-        const response = await axios.get(`${data.idParking}/place`, { params })
+          const response = await axios(`/parkings/${data.idParking}/place`, {params});
+          console.log(response.data);
         data.numeroPlace = response.data.numeroPlace
     }
-    
-    const params = {
+
+    const body = {
        idUtilisateur: data.idUtilisateur,
        idPlace: data.numeroPlace,
        heureDebut,
        heureFin
     }
-  const response = await axios.post('/reservations/save', params)
-  return response.data
+  return await fetchStream<unknown, { id: string }, unknown >(`${serverUrl}/reservations/save`, { methode: 'POST', body });
+  
 }
 
