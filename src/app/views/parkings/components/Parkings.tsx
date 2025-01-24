@@ -1,15 +1,15 @@
 "use client";
-import { use, useState } from "react";
+import { useState } from "react";
 import Parking, { ParkingData } from "./Parking";
 import LeafletMap, { Marker } from "@/components/LeafletMap";
 
 interface ParkingsProps {
-    data: Promise<ParkingData[]>;
+    data: ParkingData[];
     onParkingSelected: (parkingId: string) => void;
 }
 
 export function Parkings({data, onParkingSelected}: ParkingsProps) {
-    const parkings = use(data);
+    const parkings = data;
     const markers = parkings.map(parking => {
         return {
             nom: parking.nom,

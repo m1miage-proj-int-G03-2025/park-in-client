@@ -1,13 +1,11 @@
-import Icon from "@/components/icon";
 import { colors } from "@/constants/colors";
 import { Autocomplete, AutocompleteItem, DatePicker, Input, Select, SelectItem } from "@heroui/react";
 import React, { useMemo } from "react";
-import * as MaterialIcons from "react-icons/md";
 import { fromDate, getLocalTimeZone, today, toZoned } from '@internationalized/date';
 
 interface InputFieldProps {
   label: string;
-  iconName?: keyof typeof MaterialIcons;
+  icon?: React.ReactNode;
   placeholder: string;
   inputType?: "text" | "datetime-local" | "select" | "auto-complete";
   options?: { label: string; value: string }[];
@@ -24,7 +22,7 @@ interface InputFieldProps {
 const InputField = (props: InputFieldProps) => {
   const {
     label,
-    iconName,
+    icon,
     placeholder,
     inputType = "text",
     options = [],
@@ -83,7 +81,7 @@ const InputField = (props: InputFieldProps) => {
             onChange={handleInputChange}
             errorMessage={errorMessage}
             isInvalid={error}
-            startContent={iconName ? <Icon name={iconName} color={disabled ? "grey" : colors.main} /> : null}
+            startContent={icon}
             aria-label="transparent"
             labelPlacement="outside"
           >
@@ -123,9 +121,9 @@ const InputField = (props: InputFieldProps) => {
               }}
               color={disabled ? "default" : "primary"}
               isDisabled={disabled}
-              startContent={iconName ? <Icon name={iconName} color="primary" /> : null}
+              startContent={icon}
               labelPlacement="outside"
-              selectorIcon={iconName ? <Icon name={iconName} color={iconColor} /> : null}
+              selectorIcon={icon}
               selectorButtonPlacement="start"
               aria-label={label}
             />
@@ -153,7 +151,7 @@ const InputField = (props: InputFieldProps) => {
               onInputChange={onInputChange}
               onSelectionChange={(val) => handleInputChange(val as string)}
               errorMessage={errorMessage}
-              startContent={iconName ? <Icon name={iconName} color={iconColor} /> : null}
+              startContent={icon}
               labelPlacement="outside"
               scrollShadowProps={{
                 isEnabled: true,
@@ -181,7 +179,7 @@ const InputField = (props: InputFieldProps) => {
               value={value as string}
               onChange={handleInputChange}
               errorMessage={errorMessage}
-              startContent={iconName ? <Icon name={iconName} color={iconColor} /> : null}
+              startContent={icon}
               labelPlacement="outside"
             />
           </div>
@@ -189,7 +187,7 @@ const InputField = (props: InputFieldProps) => {
       }
     }
 
-  }, [inputType, value, error, disabled, label, iconName, placeholder, options, handleInputChange, errorMessage, required, iconColor])
+  }, [inputType, value, error, disabled, label, icon, placeholder, options, handleInputChange, errorMessage, required, iconColor])
 
   return (
     inputComponent

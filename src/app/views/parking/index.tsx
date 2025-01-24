@@ -12,8 +12,8 @@ import { useParams } from "next/navigation";
 import { useAuth } from "@/providers/AuthProvider";
 import { useRouter } from "next/navigation";
 import { Accordion, AccordionItem } from "@heroui/react";
-import Icon from "@/components/icon";
 import LeafletMap from "@/components/LeafletMap";
+import { MdCalendarToday, MdSchedule, MdStairs } from "react-icons/md";
 
 const ParkingView = () => {
   const parkingDetails = { //replace with GET /:id
@@ -138,7 +138,7 @@ const ParkingView = () => {
         disabled: true,
         inputType: "datetime-local" as const,
         value: reservationInfo.date,
-        iconName: "MdCalendarToday",
+        icon: <MdCalendarToday color="#2b77c4" size={20} />,
         labelColor: colors.main,
         iconColor: "grey",
       },
@@ -149,7 +149,7 @@ const ParkingView = () => {
         value: reservationInfo.duree,
         options: timeOpts,
         disabled: true,
-        iconName: "MdSchedule",
+        iconName: <MdSchedule color="#2b77c4" size={20} />,
         labelColor: colors.main,
         onChange: (val: string | Date) =>
           handleReservationInfoChange("duree", val),
@@ -242,9 +242,7 @@ const ParkingView = () => {
                     inputType={field.inputType}
                     value={field.value}
                     labelColor={field.labelColor}
-                    iconName={
-                      field.iconName as "MdCalendarToday" | "MdLock"
-                    }
+                    icon={field.icon}
                     iconColor={field.iconColor}
                     options={field.options}
                     onChange={field.onChange}
@@ -292,7 +290,7 @@ const ParkingView = () => {
                 {
                   etageOptions?.map((etage) => {
                     return (<AccordionItem key={etage.value} aria-label={etage.label} title={etage.label} 
-                      startContent={<Icon name='MdStairs' color={colors.main} size={30} />}
+                      startContent={<MdStairs color={colors.main} size={30} />}
                       classNames={{
                       title: "bg-transparent text-slate-500 font-semibold",
                       base: "bg-transparent",

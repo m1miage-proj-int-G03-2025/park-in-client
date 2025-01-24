@@ -4,31 +4,31 @@ import ListElement from "./components/list-element";
 import { useRouter } from "next/navigation";
 const dummyResData = [
     {
-    idReservation: 129383,
-    dateDebut: new Date(),
-    dateFin: new Date(),
-    typeVoiture: 'Voiture',
-    nomParking: 'Parking de la gare',
-    adresseParking: '12 rue de la gare',
-    statut: 'PLANIFIEE'
+        idReservation: 129383,
+        dateDebut: new Date(),
+        dateFin: new Date(),
+        typeVoiture: 'Voiture',
+        nomParking: 'Parking de la gare',
+        adresseParking: '12 rue de la gare',
+        statut: 'PLANIFIEE'
     },
     {
-    idReservation: 129384,
-    dateDebut: new Date(),
-    dateFin: new Date(),
-    typeVoiture: 'PMR',
-    nomParking: 'Parking de la gare',
-    adresseParking: '12 rue de la gare',
-    statut: 'ENCOURS'
+        idReservation: 129384,
+        dateDebut: new Date(),
+        dateFin: new Date(),
+        typeVoiture: 'PMR',
+        nomParking: 'Parking de la gare',
+        adresseParking: '12 rue de la gare',
+        statut: 'ENCOURS'
     },
     {
-    idReservation: 129385,
-    dateDebut: new Date(),
-    dateFin: new Date(),
-    typeVoiture: 'Voiture',
-    nomParking: 'Parking de la gare',
-    adresseParking: '12 rue de la gare',
-    statut: 'TERMINEE'
+        idReservation: 129385,
+        dateDebut: new Date(),
+        dateFin: new Date(),
+        typeVoiture: 'Voiture',
+        nomParking: 'Parking de la gare',
+        adresseParking: '12 rue de la gare',
+        statut: 'TERMINEE'
     },
     {
         idReservation: 129386,
@@ -38,43 +38,43 @@ const dummyResData = [
         nomParking: 'Parking de la gare',
         adresseParking: '12 rue de la gare',
         statut: 'ANNULEE'
-        },
-        {
-            idReservation: 129387,
-            dateDebut: new Date(),
-            dateFin: new Date(),
-            typeVoiture: 'Voiture',
-            nomParking: 'Parking de la gare',
-            adresseParking: '12 rue de la gare',
-            statut: 'PLANIFIEE'
-            },
-            {
-            idReservation: 129388,
-            dateDebut: new Date(),
-            dateFin: new Date(),
-            typeVoiture: 'PMR',
-            nomParking: 'Parking de la gare',
-            adresseParking: '12 rue de la gare',
-            statut: 'ENCOURS'
-            },
-            {
-            idReservation: 129365,
-            dateDebut: new Date(),
-            dateFin: new Date(),
-            typeVoiture: 'Voiture',
-            nomParking: 'Parking de la gare',
-            adresseParking: '12 rue de la gare',
-            statut: 'TERMINEE'
-            },
-            {
-                idReservation: 129396,
-                dateDebut: new Date(),
-                dateFin: new Date(),
-                typeVoiture: 'Voiture',
-                nomParking: 'Parking de la gare',
-                adresseParking: '12 rue de la gare',
-                statut: 'ANNULEE'
-                }
+    },
+    {
+        idReservation: 129387,
+        dateDebut: new Date(),
+        dateFin: new Date(),
+        typeVoiture: 'Voiture',
+        nomParking: 'Parking de la gare',
+        adresseParking: '12 rue de la gare',
+        statut: 'PLANIFIEE'
+    },
+    {
+        idReservation: 129388,
+        dateDebut: new Date(),
+        dateFin: new Date(),
+        typeVoiture: 'PMR',
+        nomParking: 'Parking de la gare',
+        adresseParking: '12 rue de la gare',
+        statut: 'ENCOURS'
+    },
+    {
+        idReservation: 129365,
+        dateDebut: new Date(),
+        dateFin: new Date(),
+        typeVoiture: 'Voiture',
+        nomParking: 'Parking de la gare',
+        adresseParking: '12 rue de la gare',
+        statut: 'TERMINEE'
+    },
+    {
+        idReservation: 129396,
+        dateDebut: new Date(),
+        dateFin: new Date(),
+        typeVoiture: 'Voiture',
+        nomParking: 'Parking de la gare',
+        adresseParking: '12 rue de la gare',
+        statut: 'ANNULEE'
+    }
 ]
 
 const ReservationsListView = () => {
@@ -92,20 +92,18 @@ const ReservationsListView = () => {
     }
 
     return (
-            <Suspense fallback={<ReservationsSkeleton />}>
-          <div className="flex min-h-screen justify-center items-center flex-col">
-            <div className="mt-20 pt-8 pb-8">
+        <Suspense fallback={<ReservationsSkeleton />}>
+            <div className="flex min-h-screen justify-center items-center flex-col">
+                <div className="flex flex-col justify-center items-center w-[60%] 2xl:[60%] mt-24">
+                    {
+                        reservations?.map((reservation) => {
+                            return <ListElement key={reservation.idReservation} {...reservation} handleReservationClicked={handleReservationClick} onCancelClick={handleCancelReservation} />
+                        })
+                    }
                 </div>
-                <div className="justify-center align-center w-2/3">
-            {
-                reservations?.map((reservation) => {
-                    return <ListElement key={reservation.idReservation} {...reservation} handleReservationClicked={handleReservationClick} onCancelClick={handleCancelReservation}/>
-                })
-            }
             </div>
-                </div>
 
-            </Suspense>
+        </Suspense>
     );
 }
 

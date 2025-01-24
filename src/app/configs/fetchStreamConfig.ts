@@ -36,10 +36,7 @@ async function fetchStream<T, U>(urlString: string, params?: T): Promise<U[]> {
   
           boundary = buffer.indexOf('\n');
         }
-    }
-
-    console.log("RESPONSE", responseJson);
-    
+    }    
     
     return responseJson;
 }

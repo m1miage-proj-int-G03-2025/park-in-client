@@ -1,7 +1,7 @@
 "use client";
 
 import { typesOpts } from "@/constants/typesOpts";
-import { useMemo, useState } from "react";
+import { ReactNode, useMemo, useState } from "react";
 import * as MaterialIcons from "react-icons/md";
 import { timeOpts } from "@/constants/timeOpts";
 import { Button } from "@heroui/react";
@@ -72,7 +72,7 @@ const handleRechercheClick = () => {
 
   const fields: Array<{
     label: string;
-    iconName?: keyof typeof MaterialIcons;
+    icon?: ReactNode;
     inputType?: "text" | "datetime-local" | "select";
     placeholder: string;
     value: string | Date | null;
@@ -92,7 +92,7 @@ const handleRechercheClick = () => {
       {
         label: "Durée",
         inputType: "select",
-        iconName: "MdSchedule",
+        icon: <MaterialIcons.MdSchedule color="#2b77c4" size={24} />,
         placeholder: "Durée",
         value: reservationInfo.duree,
         onChange: (value: string | Date) => handleSelection("duree", value),
@@ -101,7 +101,7 @@ const handleRechercheClick = () => {
       },
       {
         label: "Type de place",
-        iconName: "MdLocalParking",
+        icon: <MaterialIcons.MdLocalParking color="#2b77c4" size={24} />,
         inputType: "select",
         placeholder: "Type de place",
         value: reservationInfo.typeVoiture,
@@ -136,7 +136,7 @@ const handleRechercheClick = () => {
           <div className="flex-1">
             <InputField
               label="Ville"
-              iconName="MdLocationOn"
+              icon={<MaterialIcons.MdLocationOn color="#2b77c4" size={24} />}
               inputType="auto-complete"
               options={villes}
               placeholder="Indiquez votre emplacement"
@@ -152,7 +152,7 @@ const handleRechercheClick = () => {
             <div key={index} className="flex-1 w-[300px] flex flex-col">
               <InputField
                 label={field.label}
-                iconName={field.iconName}
+                icon={field.icon}
                 inputType={field.inputType}
                 placeholder={field.placeholder}
                 value={field.value}
@@ -165,7 +165,7 @@ const handleRechercheClick = () => {
         </div>
         <Button
           className="mt-4 px-14 py-6 bg-secondary text-white rounded-full text-lg font-semibold shadow-xl"
-          onClick={handleRechercheClick}
+          onPress={handleRechercheClick}
         >
           Rechercher des places parking
         </Button>
