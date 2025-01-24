@@ -2,8 +2,8 @@ import { Modal, ModalBody, ModalContent, ModalFooter, Button, ModalHeader } from
 import { useMemo } from "react";
 import InfoField from "./info-field";
 import { timeOpts } from "@/constants/timeOpts";
-import Icon from "@/components/icon";
 import { colors } from "@/constants/colors";
+import { MdInfo } from "react-icons/md";
 
 interface ReservationDetailsModalProps {
     isOpen: boolean;
@@ -49,7 +49,7 @@ const ReservationDetailsModal = (props: ReservationDetailsModalProps) => {
  })}
         {reservationDetails.numeroPlace == "" && (
             <div className="flex flex-row items-center gap-1">
-            <Icon name="MdInfo" color={colors.main} size={60} />
+            <MdInfo color={colors.main} size={60} />
             <p className="text-sm font-normal text-primary">
         Vous n`avez pas choisi une place de parking, une place aleatoire vous sera attribuée automatiquement
     </p>

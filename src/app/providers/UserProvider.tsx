@@ -1,25 +1,31 @@
 import { UserContext } from "@/contexts/userContext";
-import { ReactNode, useContext, useState } from "react";
-import { useAuth } from "./AuthProvider";
+import { ReactNode, useContext, useEffect, useState } from "react";
 
 export const UserProvider = ({ children }: { children: ReactNode }) => {
-    const [userId, setUserId] = useState<string | null>(localStorage.getItem('userId') || null);
-    const {setUser} = useAuth()
+    const [userId, setUserId] = useState<string | null>(null);
+    const [isInitialized, setIsInitialized] = useState(false)
 
-    const addUser = (id: string | null) => {
+    const addUser = async (id: string | null) => {
       if(id && id.length >0) {}
       setUserId(id);
       if (id !== null) {
-        localStorage.setItem('userId', id);
+        await localStorage.setItem('userId', id);
       } else {
-        localStorage.removeItem('userId');
-        setUser(null)
+        await localStorage.removeItem('userId');
       }
     }
+
+    useEffect(() => {
+      if (typeof window !== 'undefined') {
+          const storedUserId = localStorage.getItem('userId');
+          setUserId(storedUserId || null);
+          setIsInitialized(true); 
+      }
+  }, []);
   
   
     return (
-      <UserContext.Provider value={{ userId, addUser }}>
+      <UserContext.Provider value={{ userId, addUser, isInitialized }}>
         {children}
       </UserContext.Provider>
     );

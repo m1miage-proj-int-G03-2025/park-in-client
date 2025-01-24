@@ -1,95 +1,68 @@
-import { Suspense, useState } from "react";
+import { Suspense, useEffect, useState } from "react";
 import ReservationsSkeleton from "./components/reservation-skeleton";
 import ListElement from "./components/list-element";
 import { useRouter } from "next/navigation";
-const dummyResData = [
-    {
-        idReservation: 129383,
-        dateDebut: new Date(),
-        dateFin: new Date(),
-        typeVoiture: 'Voiture',
-        nomParking: 'Parking de la gare',
-        adresseParking: '12 rue de la gare',
-        statut: 'PLANIFIEE'
-    },
-    {
-        idReservation: 129384,
-        dateDebut: new Date(),
-        dateFin: new Date(),
-        typeVoiture: 'PMR',
-        nomParking: 'Parking de la gare',
-        adresseParking: '12 rue de la gare',
-        statut: 'ENCOURS'
-    },
-    {
-        idReservation: 129385,
-        dateDebut: new Date(),
-        dateFin: new Date(),
-        typeVoiture: 'Voiture',
-        nomParking: 'Parking de la gare',
-        adresseParking: '12 rue de la gare',
-        statut: 'TERMINEE'
-    },
-    {
-        idReservation: 129386,
-        dateDebut: new Date(),
-        dateFin: new Date(),
-        typeVoiture: 'Voiture',
-        nomParking: 'Parking de la gare',
-        adresseParking: '12 rue de la gare',
-        statut: 'ANNULEE'
-    },
-    {
-        idReservation: 129387,
-        dateDebut: new Date(),
-        dateFin: new Date(),
-        typeVoiture: 'Voiture',
-        nomParking: 'Parking de la gare',
-        adresseParking: '12 rue de la gare',
-        statut: 'PLANIFIEE'
-    },
-    {
-        idReservation: 129388,
-        dateDebut: new Date(),
-        dateFin: new Date(),
-        typeVoiture: 'PMR',
-        nomParking: 'Parking de la gare',
-        adresseParking: '12 rue de la gare',
-        statut: 'ENCOURS'
-    },
-    {
-        idReservation: 129365,
-        dateDebut: new Date(),
-        dateFin: new Date(),
-        typeVoiture: 'Voiture',
-        nomParking: 'Parking de la gare',
-        adresseParking: '12 rue de la gare',
-        statut: 'TERMINEE'
-    },
-    {
-        idReservation: 129396,
-        dateDebut: new Date(),
-        dateFin: new Date(),
-        typeVoiture: 'Voiture',
-        nomParking: 'Parking de la gare',
-        adresseParking: '12 rue de la gare',
-        statut: 'ANNULEE'
-    }
-]
+import { getUserReservations } from "@/services/userService";
+import { useUserContext } from "@/providers/UserProvider";
+import { useLoading } from "@/contexts/loadingContext";
+import { getTypeVoitureByKey } from "@/utils/enum-key-helper";
+import { cancelReservation } from "@/services/reservationsService";
+interface Reservation {
+    idReservation: number;
+    dateDebut: Date;
+    dateFin: Date;
+    typeVoiture: string;
+    nomParking: string;
+    adresseParking: string;
+    statut: string;
+}
 
 const ReservationsListView = () => {
-    const [reservations, setReservations] = useState(dummyResData);
+
+    const [reservations, setReservations] = useState<Reservation[]>([]);
     const router = useRouter()
+    const {setIsLoading} = useLoading()
+    const {userId, isInitialized} = useUserContext()
 
     const handleReservationClick = (id: number) => {
         router.push(`/reservations/${id}`)
     }
 
-    const handleCancelReservation = (id: number) => {
-        //send delete req to BE
-        //this is temporary just to bypass the es-lint error
-        setReservations(reservations.filter(res => res.idReservation !== id))
+    const fetchReservations = async () => {
+
+        if (userId) {
+            setIsLoading(true);
+            try {
+                const response = await getUserReservations(userId);
+                setReservations(response.map((res) => ({
+                    ...res,
+                    typeVoiture: getTypeVoitureByKey(res.typeVoiture),
+                })));
+            } catch (error) {
+                console.error("Error fetching reservations:", error);
+            } finally {
+                setIsLoading(false);
+            }
+        } else {
+            router.push('/login')
+        }
+    };
+
+    const handleCancelReservation = async (id: number) => {
+        setIsLoading(true)
+       await cancelReservation(id).then(() => {
+        fetchReservations()
+       }).finally(() => {
+        setIsLoading(false)
+       })
     }
+
+    useEffect(() => {
+        if(isInitialized) {
+            fetchReservations()
+        }
+
+    },[isInitialized])
 
     return (
         <Suspense fallback={<ReservationsSkeleton />}>
