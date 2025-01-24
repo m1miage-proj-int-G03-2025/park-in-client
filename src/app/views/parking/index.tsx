@@ -11,6 +11,7 @@ import ReservationDetailsModal from "./components/reservation-details-modal";
 import { useParams, useSearchParams } from "next/navigation";
 import { useAuth } from "@/providers/AuthProvider";
 import { useRouter } from "next/navigation";
+import { MdCalendarToday, MdSchedule, MdStairs } from "react-icons/md";
 import { Accordion, AccordionItem, Skeleton } from "@heroui/react";
 import Icon from "@/components/icon";
 import { getParkingDetails, getPlacesDisponibles, reservePlace } from "@/services/parkingsService";
@@ -170,8 +171,8 @@ const ParkingView = () => {
         placeholder: "Date de début",
         disabled: true,
         inputType: "datetime-local" as const,
-        value: new Date(reservationInfo?.date),
-        iconName: "MdCalendarToday",
+        value: reservationInfo.date,
+        icon: <MdCalendarToday color="#2b77c4" size={20} />,
         labelColor: colors.main,
         iconColor: "grey",
       },
@@ -182,7 +183,7 @@ const ParkingView = () => {
         value: reservationInfo?.duree,
         options: timeOpts,
         disabled: true,
-        iconName: "MdSchedule",
+        iconName: <MdSchedule color="#2b77c4" size={20} />,
         labelColor: colors.main,
         onChange: (val: string | Date) =>
           handleReservationInfoChange("duree", val),
@@ -263,24 +264,41 @@ const ParkingView = () => {
 
 
   return (
-      <div className="pt-20 min-h-screen" suppressHydrationWarning>
-        <div
-          className="pt-10 pb-24 overflow-y-auto"
-          style={{
-            height: "calc(100vh - 80px)",
-          }}
-        >
-          <ReservationDetailsModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} reservationDetails={reservationDetails} onConfirm={handleConfirmReservation} />
-          <div className="p-6">
-            <div className="flex flex-row justify-between">
-              <div className="flex-col">
-                <label className="text-left text-3xl font-bold text-black mb-6 bloc">
-                  {parkingDetails.nom}
-                </label>
-                <div className="flex flex-row items-center gap-20 mt-10 mb-10">
-                  {infoFields?.map((field, index) => {
-                    return <InfoField key={index} {...field} iconName={field.iconName || undefined} />
-                  })}
+    <div className="pt-20 min-h-screen">
+      <div
+        className="pt-10 pb-24 overflow-y-auto"
+        style={{
+          height: "calc(100vh - 80px)",
+        }}
+      >
+        <ReservationDetailsModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} reservationDetails={reservationDetails} onConfirm={handleConfirmReservation} />
+        <div className="p-6">
+        <div className="flex flex-row justify-between">
+          <div className="flex-col">
+          <label className="text-left text-3xl font-bold text-black mb-6 bloc">
+            {parkingDetails.nom}
+          </label>
+          <div className="flex flex-row items-center gap-20 mt-10 mb-10">
+            {infoFields?.map((field, index) => {
+              return <InfoField key={index} {...field} />
+            })}
+          </div>
+          {preSelectedFields && <div className="mb-10 flex flex-row pl-0 gap-4">
+            {preSelectedFields.map((field, index) => {
+              return (
+                <div className="flex-1" key={index}>
+                  <InputField
+                    label={field.label}
+                    placeholder={field.placeholder}
+                    disabled={field.disabled}
+                    inputType={field.inputType}
+                    value={field.value}
+                    labelColor={field.labelColor}
+                    icon={field.icon}
+                    iconColor={field.iconColor}
+                    options={field.options}
+                    onChange={field.onChange}
+                  />
                 </div>
                 {preSelectedFields && <div className="mb-10 flex flex-row pl-0 gap-4">
                   {preSelectedFields.map((field, index) => {
@@ -365,6 +383,31 @@ const ParkingView = () => {
                   }
                 </Accordion>
               </div>
+              <Accordion showDivider={false}>
+                {
+                  etageOptions?.map((etage) => {
+                    return (<AccordionItem key={etage.value} aria-label={etage.label} title={etage.label} 
+                      startContent={<MdStairs color={colors.main} size={30} />}
+                      classNames={{
+                      title: "bg-transparent text-slate-500 font-semibold",
+                      base: "bg-transparent",
+                      content: "bg-transparent",
+                      heading: 'bg-white rounded-2xl px-14 shadow-lg m-4' 
+                }} >
+                      <PlaceSelector
+                        places={placesAvailable.filter((place) => place.etage === parseInt(etage.value))}
+                        selectedPlace={selectedPlace?.numeroPlace}
+                        selectedTypePlace={selectedPlace?.typePlace}
+                        onSelectPlace={(numPlace) => {
+                          handleSelect("numeroPlace", numPlace);
+                        }}
+                      />
+
+                    </AccordionItem>)
+                  })
+
+                }
+              </Accordion>
             </div>
           </div>
         </div>

@@ -1,17 +1,18 @@
 import { colors } from "@/constants/colors";
+import { MdBrowseGallery, MdCancel, MdCheckCircle, MdEventBusy, MdIncompleteCircle } from "react-icons/md";
 
 const getReservationStatusIcon = (status: string) => { 
     switch(status) {
         case "PLANIFIEE":
-            return {icon: "MdBrowseGallery", color: colors.darkGrey}
+            return <MdBrowseGallery color={colors.darkGrey} size={43} />
         case "ENCOURS":
-            return {icon: "MdIncompleteCircle", color: colors.main};
+            return <MdIncompleteCircle color={colors.main} size={43} />;
         case "TERMINEE":
-            return {icon: "MdCheckCircle", color: colors.secondary}
+            return <MdCheckCircle color={colors.secondary} size={43} />;
         case "ANNULEE":
-            return {icon: "MdCancel", color: colors.errorRed}
+            return <MdCancel color={colors.errorRed} size={43} />;
         default:
-            return {icon: "MdEventBusy", color: colors.main};
+            return <MdEventBusy color={colors.main} size={43} />;
 }
 }
 
