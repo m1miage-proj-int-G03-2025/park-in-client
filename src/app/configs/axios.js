@@ -1,7 +1,7 @@
 import originalAxios from 'axios';
 
 export const axios = originalAxios.create({
-    baseURL: process.env.NEXT_PUBLIC_BASE_URL, 
+    baseURL: process.env.NEXT_PUBLIC_SERVER_URL, 
 });
 
 export const setupInterceptor = () => {

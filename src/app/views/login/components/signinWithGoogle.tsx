@@ -5,11 +5,8 @@ import { Image } from "@heroui/image";
 import { auth } from "@/configs/firebaseConfig";
 import { GoogleAuthProvider, signInWithPopup } from "firebase/auth";
 
-interface SignInWithGoogleProps {
-    onLogin: () => void;
-}
 
-export default function SignInWithGoogle({onLogin}: SignInWithGoogleProps) {
+export default function SignInWithGoogle() {
     const handleLogin = async () => {
         const provider = new GoogleAuthProvider();
         try {
@@ -17,7 +14,6 @@ export default function SignInWithGoogle({onLogin}: SignInWithGoogleProps) {
         } catch (error) {
             console.error("Erreur de connexion avec Google: ", error);
         }
-        onLogin();
     };
 
     return (

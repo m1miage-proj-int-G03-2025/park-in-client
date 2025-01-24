@@ -7,6 +7,7 @@ import LoggedUserInfo from "./loggedUserInfo";
 import { signOut } from "firebase/auth";
 import { auth } from "@/configs/firebaseConfig";
 import Link from "next/link";
+import { useUserContext } from "@/providers/UserProvider";
 
 const navs = [
     {name: "Accueil", link: "/", requiresLogin: false}, 
@@ -17,10 +18,13 @@ const navs = [
 export default function NavBar() {
     const router = useRouter();
     const { user } = useAuth();
+    const { setUserId } = useUserContext()
     
     const handleLogout = async () => {
         try {
             await signOut(auth);
+            setUserId(null)
+
         } catch (error) {
             console.error("Erreur de déconnexion avec Google: ", error);
         }

@@ -22,7 +22,7 @@ export default function LeafletMap({ locations, locationClicked, oneLoc }: Leafl
     const handleMapCenter = (): [number, number] => {
         const centerLat = locations.reduce((acc, current) => acc + current.marker[0], 0) / locations.length;
         const centerLong = locations.reduce((acc, current) => acc + current.marker[1], 0) / locations.length;
-        return oneLoc? locations[0].marker : [centerLat, centerLong];
+        return oneLoc? locations[0]?.marker : [centerLat, centerLong];
     }
 
     useEffect(() => {
