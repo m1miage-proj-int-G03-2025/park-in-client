@@ -1,6 +1,6 @@
 import { typesOpts } from "@/constants/typesOpts";
 import SelectorCard from "./selector-card";
-import getPlaceType from "@/utils/place-icon-helper";
+import getPlaceIcon from "@/utils/place-iconname-helper";
 
 interface TypePlaceSelectorProps {
   selectedTypePlace: string;
@@ -22,7 +22,7 @@ const TypePlaceSelector = (props: TypePlaceSelectorProps) => {
                 isSelected={isSelected}
                 key={index}
                 onSelect={() => onSelectTypePlace(type.value)}
-                iconName={getPlaceType(type.value)}
+                iconName={getPlaceIcon(type.value)}
                 label={type.label}
                 size={24}
             />

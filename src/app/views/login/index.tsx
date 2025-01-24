@@ -14,43 +14,49 @@ export default function LoginView() {
     const router = useRouter();
     const searchParams = useSearchParams();
     const searchQuery = searchParams.get('searchQuery');
-    const { userId, addUser } = useUserContext()
+    const { userId, addUser, isInitialized } = useUserContext()
     const {user} = useAuth()
     const {setIsLoading} = useLoading()
+
+    const handleReservePlace = async (data: {numeroPlace: string, idUtilisateur: string, dateDebut: string, duree: string, typePlace: string}) => {
+        await reservePlace(data).then((response) => {
+            router.push(`/reservations/${response[0].id}`)
+        })
+    }
 
     const handleLogin = async () => {
         if(user?.email) {
         setIsLoading(true)
-        const data = await getUserData(user.email);
-        addUser(data[0].idUtilisateur)
-        setIsLoading(false)
-        }
-
-        if(searchQuery) {
-            const {idPlace,date, duree, typePlace } = JSON.parse(searchQuery)
-            if (userId) {
-                const data = {
-                    numeroPlace: idPlace,
-                    idUtilisateur: userId,
-                    dateDebut: date,
-                    duree: duree,
-                    typePlace
+        await getUserData(user.email).then((data) => {
+            console.log(data)
+            addUser(data[0].idUtilisateur)
+            if(searchQuery) {
+                const {idPlace,date, duree, typePlace } = JSON.parse(searchQuery)
+                if (isInitialized && userId) {
+                    const data = {
+                        numeroPlace: idPlace,
+                        idUtilisateur: userId,
+                        dateDebut:date,
+                        duree: duree,
+                        typePlace
+                    }
+                    handleReservePlace(data)
+                } else {
+                    console.error("User ID is null");
                 }
-                const response = await reservePlace(data)
-                router.push(`/reservations/${response[0].id}`)
             } else {
-                console.error("User ID is null");
-            }
-        } else {
-            if(user) {
-                router.back()
-            }
+                    if(userId)
+                    router.back()
+            }         
+        }).finally(() => {
+            setIsLoading(false)
+        })
         }
     } 
 
         useEffect(() => {
             handleLogin()
-        }, [user])
+        }, [isInitialized, userId, user])
 
     return (
         <div className="flex flex-col justify-center items-center h-screen">

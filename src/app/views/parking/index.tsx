@@ -9,7 +9,6 @@ import TotalPriceBar from "./components/total-price";
 import InfoField from "./components/info-field";
 import ReservationDetailsModal from "./components/reservation-details-modal";
 import { useParams, useSearchParams } from "next/navigation";
-import { useAuth } from "@/providers/AuthProvider";
 import { useRouter } from "next/navigation";
 import { Accordion, AccordionItem, Skeleton } from "@heroui/react";
 import { getParkingDetails, getPlacesDisponibles, reservePlace } from "@/services/parkingsService";
@@ -29,8 +28,7 @@ const ParkingView = () => {
   const searchParams = useSearchParams();
   const router = useRouter();
   const { setIsLoading } = useLoading()
-  const {userId} = useUserContext()
-  console.log(userId)
+  const {userId, isInitialized} = useUserContext()
 
   const [parkingDetails, setParkingDetails] = useState({
     nom: "",
@@ -52,7 +50,6 @@ const ParkingView = () => {
   });
   const [selectedBloc, setSelectedBloc] = useState(1);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const { user } = useAuth();
 
   const fetchParkingDetails = async () => {
     const details = await getParkingDetails(parkingId);
@@ -87,7 +84,6 @@ const ParkingView = () => {
   }
 
   const handleReserve =  async() => {
-    console.log(userId)
     if (!userId) {
       throw new Error("User ID is null");
     }
@@ -126,7 +122,10 @@ const ParkingView = () => {
 
   const handleConfirmReservation = () => {
     setIsModalOpen(false);
-    if (user) {
+    while(!isInitialized) {
+    setIsLoading(true)
+    }
+    if (userId) {
       if(selectedPlace?.typePlace) {
         handleReserve()
       }
