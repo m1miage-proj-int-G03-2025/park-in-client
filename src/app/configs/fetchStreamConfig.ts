@@ -1,11 +1,20 @@
-async function fetchStream<T, U>(urlString: string, params?: T): Promise<U[]> {
+type FetchStreamParams<T, B> = {
+  params?: T,
+  methode?: string,
+  body?: B
+}
+async function fetchStream<T, U, B>(urlString: string, params?: FetchStreamParams<T, B>): Promise<U[]> {
     const url = new URL(urlString);
-
-    if (params) {
-        url.search = new URLSearchParams(params).toString();
+    if (params?.params) {
+        url.search = new URLSearchParams(params?.params).toString();
     }
 
-    const response = await fetch(url);
+    const response = await fetch(url, {
+      method: params?.methode || 'GET',
+      headers: { 'Content-Type': 'application/json' },
+      body: params?.body ? JSON.stringify(params.body) : undefined,
+
+    });
     const responseJson: Array<U> = [];
 
     if (!response.body) {

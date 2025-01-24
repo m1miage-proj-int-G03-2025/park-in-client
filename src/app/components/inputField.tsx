@@ -19,7 +19,9 @@ interface InputFieldProps {
   onInputChange?: (value: string) => void;
 }
 
+
 const InputField = (props: InputFieldProps) => {
+  
   const {
     label,
     icon,
@@ -36,6 +38,7 @@ const InputField = (props: InputFieldProps) => {
     onInputChange = () => { },
   } = props;
 
+
   const handleInputChange = (
     event: React.ChangeEvent<HTMLInputElement | HTMLSelectElement> | Date | string
   ) => {
@@ -44,7 +47,6 @@ const InputField = (props: InputFieldProps) => {
         onChange(event as Date);
         break;
       case "auto-complete":
-        console.log(event)
         onChange(event as unknown as string);
         break;
       default:
@@ -95,8 +97,11 @@ const InputField = (props: InputFieldProps) => {
       case "datetime-local": {
         return (
           <div>
-            <span className="text-white !bg-transparent font-bold margin-bottom-10 text-lg" style={{
-              color: disabled ? '#95BBE1' : labelColor
+            <span className="text-white !bg-transparent font-bold text-lg" style={{
+              color: disabled ? '#95BBE1' : labelColor,
+              marginTop: '-7px',
+              marginBottom: '7px',
+              display: 'block'
             }}>{label}</span>
             <DatePicker
               hideTimeZone

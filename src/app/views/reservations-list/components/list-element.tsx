@@ -28,10 +28,10 @@ const ListElement = ({ idReservation, dateDebut, dateFin, typeVoiture, nomParkin
 
     const formatHeure = (date: Date) => {
         return new Intl.DateTimeFormat('fr-FR', {
-            hour12: true,
             hour: '2-digit',
             minute: '2-digit',
-        }).format(date);
+            hour12: false,
+        }).format(date).replace(':', 'h');
     }
 
     return (

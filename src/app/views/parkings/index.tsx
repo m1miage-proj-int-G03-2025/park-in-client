@@ -34,7 +34,7 @@ export default function ParkingsView(params: ParkingsParams) {
 
     const handleParkingSelected = (parkingId: string) => {
         const queryString = encodeURIComponent(JSON.stringify(params));
-        router.push(`/parkings/${parkingId}?${queryString}`)
+        router.push(`/parkings/${parkingId}?searchQuery=${queryString}`)
     };
 
     return (
