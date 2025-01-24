@@ -4,7 +4,7 @@ import { FaLocationDot } from "react-icons/fa6";
 import { LuSquareParking } from "react-icons/lu";
 
 export interface ParkingData {
-    parkingId: string;
+    idParking: string;
     nom: string,
     adresse: string,
     xLongitude: number,
@@ -23,11 +23,11 @@ interface ParkingProps {
 
 export default function Parking({data, onParkingSelected, onParkingClicked}: ParkingProps) {
     
-    const handleParkingSelected = () => onParkingSelected(data.parkingId);
+    const handleParkingSelected = (parkingId: string) => onParkingSelected(parkingId);
     const handleParkingClicked = () => onParkingClicked(data.nom)
 
     return (
-        <div className="flex bg-white rounded-xl w-[100%] p-3 my-3 h-40 shadow-xl cursor-pointer" onClick={handleParkingClicked}>
+        <div className="flex bg-white rounded-xl w-[100%] p-3 my-3 h-40 shadow-xl cursor-pointer" onClick={() => handleParkingClicked()}>
             <div className=""><LuSquareParking size={50} color="#0466C8"/></div>
             <div className="flex flex-col justify-between grow pl-4">
                 <div className="flex flex-col">
@@ -53,7 +53,7 @@ export default function Parking({data, onParkingSelected, onParkingClicked}: Par
                     <div className="font-semibold text-xl">{data.tarifMin} &euro;</div>
                 </div>
                 <div>
-                    <Button onPress={handleParkingSelected} className="py-3 px-4 text-xl text-white font-semibold bg-[#449A1D]">Réserver</Button>
+                    <Button onPress={() => handleParkingSelected(data.idParking)} className="py-3 px-4 text-xl text-white font-semibold bg-[#449A1D]">Réserver</Button>
                 </div>
             </div>
         </div>

@@ -39,12 +39,12 @@ const InfoField = (props: InputFieldProps) => {
             {iconName && <Icon name={iconName} color={iconColor} size={iconSize} />}
             {type === "link" ? (
                 <a
-                    href={`https://${text}`}
+                    href={`${text}`}
                     target="_blank"
                     rel="noopener noreferrer"
                     className="text-xl font-normal text-blue-600 underline leading-none align-middle flex-grow"
                 >
-                    {text}
+                    Lien Parking
                 </a>
             ) : (
                 <p className="text-xl font-normal text-black mb-0 leading-none align-middle flex-grow">

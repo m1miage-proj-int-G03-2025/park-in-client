@@ -28,7 +28,7 @@ const SelectorCard = (props: SelectorCardProps) => {
       isHoverable={!isDisabled && !isSelected}
       isPressable={!isDisabled}
       className={`cursor-pointer ${
-        type ? "w-33 h-33" : "w-28 h-32"
+        type ? "w-33 h-33" : "w-20 h-28"
       } ${
         isDisabled
           ? "bg-gray-200 text-gray-400 cursor-not-allowed"

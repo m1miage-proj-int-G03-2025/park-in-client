@@ -7,11 +7,7 @@ import { useState } from "react";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { auth } from "@/configs/firebaseConfig";
 
-interface SignInWithEmailAndPasswordProps {
-    onLogin: () => void;
-}
-
-export default function SignInWithEmailAndPassword({onLogin}: SignInWithEmailAndPasswordProps) {
+export default function SignInWithEmailAndPassword() {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
 
@@ -28,7 +24,6 @@ export default function SignInWithEmailAndPassword({onLogin}: SignInWithEmailAnd
             setInvalid(true);
             console.error("Erreur de connexion", error);
         }
-        onLogin();
       };
 
     return (
