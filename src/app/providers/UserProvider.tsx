@@ -1,11 +1,25 @@
 import { UserContext } from "@/contexts/userContext";
 import { ReactNode, useContext, useState } from "react";
+import { useAuth } from "./AuthProvider";
 
 export const UserProvider = ({ children }: { children: ReactNode }) => {
-    const [userId, setUserId] = useState<string | null>(null);
+    const [userId, setUserId] = useState<string | null>(localStorage.getItem('userId') || null);
+    const {setUser} = useAuth()
+
+    const addUser = (id: string | null) => {
+      if(id && id.length >0) {}
+      setUserId(id);
+      if (id !== null) {
+        localStorage.setItem('userId', id);
+      } else {
+        localStorage.removeItem('userId');
+        setUser(null)
+      }
+    }
+  
   
     return (
-      <UserContext.Provider value={{ userId, setUserId }}>
+      <UserContext.Provider value={{ userId, addUser }}>
         {children}
       </UserContext.Provider>
     );

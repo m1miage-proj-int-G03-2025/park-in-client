@@ -14,7 +14,7 @@ export default function LoginView() {
     const router = useRouter();
     const searchParams = useSearchParams();
     const searchQuery = searchParams.get('searchQuery');
-    const { userId, setUserId } = useUserContext()
+    const { userId, addUser } = useUserContext()
     const {user} = useAuth()
     const {setIsLoading} = useLoading()
 
@@ -22,7 +22,7 @@ export default function LoginView() {
         if(user?.email) {
         setIsLoading(true)
         const data = await getUserData(user.email);
-        setUserId(data[0].idUtilisateur)
+        addUser(data[0].idUtilisateur)
         setIsLoading(false)
         }
 

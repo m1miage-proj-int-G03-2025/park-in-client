@@ -18,12 +18,12 @@ const navs = [
 export default function NavBar() {
     const router = useRouter();
     const { user } = useAuth();
-    const { setUserId } = useUserContext()
+    const { addUser } = useUserContext()
     
     const handleLogout = async () => {
         try {
             await signOut(auth);
-            setUserId(null)
+            addUser(null);
 
         } catch (error) {
             console.error("Erreur de déconnexion avec Google: ", error);
@@ -40,7 +40,7 @@ export default function NavBar() {
                     {
                         navs.filter(nav => !nav.requiresLogin || (nav.requiresLogin && user != null))
                             .map((nav, index) => (
-                                <div key={index} className="mx-6"><Link className="text-black" href={`/${nav.link}`}>{nav.name}</Link></div>
+                                <div key={index} className="mx-6"><Link href={nav.link} className="text-black">{nav.name}</Link></div>
                             ))
                     }
                 </div>
