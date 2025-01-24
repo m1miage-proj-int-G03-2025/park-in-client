@@ -33,7 +33,7 @@ const ListElement = ({ idReservation, dateDebut, dateFin, typeVoiture, nomParkin
             hour: '2-digit',
             minute: '2-digit',
             hour12: false,
-        }).format(date);
+        }).format(date).replace(':', 'h');
     }
 
     return (
