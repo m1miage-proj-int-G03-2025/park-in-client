@@ -8,9 +8,9 @@ export default function AuthProvider({ children}: { children: ReactNode }) {
     const [user, setUser] = useState<User | null>(null);
 
     useEffect(() => {
-        const unsubscribe = onIdTokenChanged(auth, (user) => {  
-            console.log(user)          
+        const unsubscribe = onIdTokenChanged(auth, (user) => {           
             setUser(user);
+            
         });
         return () => unsubscribe();
     }, [user]);
