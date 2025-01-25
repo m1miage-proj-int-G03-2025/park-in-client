@@ -1,14 +1,14 @@
 "use client";
 import SignInWithGoogle from "./components/signinWithGoogle";
 import SignInWithEmailAndPassword from "./components/SigninWithEmailAndPassword";
-import LogoParkin from "@/components/logoParkin";
+import LogoParkin from "@/common/components/logoParkin";
 import { useRouter, useSearchParams } from "next/navigation";
-import { getUserData } from "@/services/userService";
-import { useUserContext } from "@/providers/UserProvider";
-import { useAuth } from "@/providers/AuthProvider";
-import { useLoading } from "@/contexts/loadingContext";
+import { getUserData } from "@/common/services/userService";
+import { useUserContext } from "@/common/providers/UserProvider";
+import { useAuth } from "@/common/providers/AuthProvider";
+import { useLoading } from "@/common/contexts/loadingContext";
 import { useEffect } from "react";
-import { reservePlace } from "@/services/parkingsService";
+import { reservePlace } from "@/common/services/parkingsService";
 
 export default function LoginView() {
     const router = useRouter();
@@ -19,6 +19,7 @@ export default function LoginView() {
     const {setIsLoading} = useLoading()
 
     const handleReservePlace = async (data: {numeroPlace: string, idUtilisateur: string, dateDebut: string, duree: string, typePlace: string}) => {
+        console.log(data)
         await reservePlace(data).then((response) => {
             router.push(`/reservations/${response[0].id}`)
         })

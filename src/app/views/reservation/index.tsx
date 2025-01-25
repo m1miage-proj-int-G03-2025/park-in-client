@@ -1,6 +1,6 @@
 "use client";
 
-import dayjs from "@/configs/dayjsConfig";
+import dayjs from "@/common/configs/dayjsConfig";
 import DetailsInfo from "./components/detailsInfo";
 import QRCode from "react-qr-code";
 import { MdLocationPin } from "react-icons/md";
@@ -10,11 +10,11 @@ import { Button } from "@heroui/react";
 import { Image } from "@heroui/image"
 import { useParams } from "next/navigation";
 import { useEffect, useMemo, useState } from "react";
-import { cancelReservation, getReservationDetails } from "@/services/reservationsService";
-import { useLoading } from "@/contexts/loadingContext";
-import getReservationStatusIcon from "@/utils/reservation-icon-helper";
-import { getTypeVoitureByKey } from "@/utils/enum-key-helper";
-import { colors } from "@/constants/colors";
+import { cancelReservation, getReservationDetails } from "@/common/services/reservationsService";
+import { useLoading } from "@/common/contexts/loadingContext";
+import getReservationStatusIcon from "@/common/utils/reservation-icon-helper";
+import { getTypeVoitureByKey } from "@/common/utils/enum-key-helper";
+import { colors } from "@/common/constants/colors";
 
 interface ReservationDetails {
     idReservation: number;

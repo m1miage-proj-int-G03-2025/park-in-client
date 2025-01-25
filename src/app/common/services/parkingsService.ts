@@ -1,8 +1,8 @@
 import { ParkingsParams } from "@/views/parkings";
 import { ParkingData } from "@/views/parkings/components/Parking";
-import dayjs from "@/configs/dayjsConfig";
-import fetchStream from "@/configs/fetchStreamConfig";
-import { axios } from "@/configs/axios";
+import dayjs from "@/common/configs/dayjsConfig";
+import fetchStream from "@/common/configs/fetchStreamConfig";
+import { axios } from "@/common/configs/axios";
 const serverUrl = process.env.NEXT_PUBLIC_SERVER_URL;
 
 export async function searchParkings(data: ParkingsParams): Promise<ParkingData[]> {
@@ -50,7 +50,7 @@ export async function getPlacesDisponibles(data: { typePlace: string, dateDebut:
 export async function reservePlace(data: { numeroPlace: string, idUtilisateur: string, dateDebut: string, duree: string, idParking?: string, typePlace: string }): Promise<{ id: string }[]> {
     const heureDebut = dayjs(data.dateDebut).tz().format("YYYY-MM-DDTHH:mm:ss");
     const heureFin = dayjs(data.dateDebut).add(+data.duree, "minute").tz().format("YYYY-MM-DDTHH:mm:ss");
-    if(data.numeroPlace?.length === 0) {
+    if(data.numeroPlace?.length === 0 || data?.numeroPlace === undefined || data?.numeroPlace === null) {
         const params = {
             typePlace: data.typePlace,
             dateDebut: heureDebut,

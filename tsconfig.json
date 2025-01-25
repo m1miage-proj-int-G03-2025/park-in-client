@@ -23,6 +23,6 @@
       "@/*": ["./src/app/*"]
     }
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts", "src/app/services/parkingsService.js",],
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts", "src/app/common/services/parkingsService.js",],
   "exclude": ["node_modules"]
 }

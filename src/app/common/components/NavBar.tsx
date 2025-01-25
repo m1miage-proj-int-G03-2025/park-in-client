@@ -2,12 +2,12 @@
 import { Button } from "@heroui/button";
 import { useRouter } from 'next/navigation';
 import LogoParkin from "./logoParkin";
-import { useAuth } from "@/providers/AuthProvider";
+import { useAuth } from "@/common/providers/AuthProvider";
 import LoggedUserInfo from "./loggedUserInfo";
 import { signOut } from "firebase/auth";
-import { auth } from "@/configs/firebaseConfig";
+import { auth } from "@/common/configs/firebaseConfig";
 import Link from "next/link";
-import { useUserContext } from "@/providers/UserProvider";
+import { useUserContext } from "@/common/providers/UserProvider";
 
 const navs = [
     {name: "Accueil", link: "/", requiresLogin: false}, 

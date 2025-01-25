@@ -1,4 +1,4 @@
-import { colors } from "@/constants/colors";
+import { colors } from "@/common/constants/colors";
 import { Autocomplete, AutocompleteItem, DatePicker, Input, Select, SelectItem } from "@heroui/react";
 import React, { useMemo } from "react";
 import { fromDate, getLocalTimeZone, today, toZoned } from '@internationalized/date';

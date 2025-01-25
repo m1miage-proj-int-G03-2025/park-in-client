@@ -1,12 +1,12 @@
 "use client";
 
-import { typesOpts } from "@/constants/typesOpts";
+import { typesOpts } from "@/common/constants/typesOpts";
 import { ReactNode, useMemo, useState } from "react";
 import * as MaterialIcons from "react-icons/md";
-import { timeOpts } from "@/constants/timeOpts";
+import { timeOpts } from "@/common/constants/timeOpts";
 import { Button } from "@heroui/react";
 import { useRouter } from "next/navigation";
-import InputField from "@/components/inputField";
+import InputField from "@/common/components/inputField";
 import axios from "axios";
 
 const RechercheParkingView = () => {

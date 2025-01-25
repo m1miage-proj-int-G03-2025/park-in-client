@@ -1,4 +1,4 @@
-import { axios } from "@/configs/axios";
+import { axios } from "@/common/configs/axios";
 
 export async function cancelReservation(idReservation: number) {
     return await axios.patch(`/reservations/${idReservation}/annulation`)

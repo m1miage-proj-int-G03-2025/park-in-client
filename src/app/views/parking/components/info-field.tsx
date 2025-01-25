@@ -1,5 +1,5 @@
-import Icon from "@/components/icon";
-import { colors } from "@/constants/colors";
+import Icon from "@/common/components/icon";
+import { colors } from "@/common/constants/colors";
 import * as MaterialIcons from "react-icons/md";
 
 interface InputFieldProps {

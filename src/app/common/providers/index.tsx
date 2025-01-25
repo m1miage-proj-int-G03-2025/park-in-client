@@ -2,10 +2,10 @@
 import {HeroUIProvider} from "@heroui/react"
 import  AuthProvider  from './AuthProvider'
 import { useEffect } from "react"
-import { setupInterceptor} from "@/configs/axios"
-import { LoadingProvider } from "@/contexts/loadingContext"
+import { setupInterceptor} from "@/common/configs/axios"
+import { LoadingProvider } from "@/common/contexts/loadingContext"
 import { UserProvider } from "./UserProvider"
-import { ErrorProvider } from "@/contexts/errorContext"
+import { ErrorProvider } from "@/common/contexts/errorContext"
 
 export function Providers({children}: { children: React.ReactNode }) {
   useEffect(() => {

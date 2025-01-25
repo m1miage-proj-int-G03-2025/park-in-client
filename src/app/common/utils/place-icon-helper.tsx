@@ -1,5 +1,5 @@
 import { MdAccessible, MdCommute, MdDirectionsBike, MdDirectionsCar, MdElectricCar, MdGroup, MdLocalParking, MdLocalShipping, MdTwoWheeler } from "react-icons/md";
-import { colors } from "@/constants/colors";
+import { colors } from "@/common/constants/colors";
 
 
 const getPlaceType = (type: string) => {
