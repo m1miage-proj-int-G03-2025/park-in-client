@@ -1,16 +1,12 @@
-"use client"
-
-import ParkingsView, { ParkingsParams } from "@/views/parkings";
-import { useSearchParams } from "next/navigation";
+"use client";
+import ParkingsView from "@/views/parkings";
+import { Suspense } from "react";
 
 const Parkings = () => {
-    const searchParams = useSearchParams();
-    const searchQuery: ParkingsParams = JSON.parse(searchParams.get('searchQuery')!);
-
     return (
-        <div>
-            <ParkingsView {...searchQuery} />
-        </div>
+        <Suspense>
+            <ParkingsView />
+        </Suspense>
     );
 }
 export default Parkings;
