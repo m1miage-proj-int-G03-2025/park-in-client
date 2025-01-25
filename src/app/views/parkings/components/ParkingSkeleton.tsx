@@ -1,3 +1,4 @@
+"use client";
 import { Skeleton } from "@heroui/skeleton";
 
 export default function ParkingSkeleton() {

@@ -1,12 +1,15 @@
 "use client";
 import { useState } from "react";
 import Parking, { ParkingData } from "./Parking";
-import LeafletMap, { Marker } from "@/common/components/LeafletMap";
+import { Marker } from "@/common/components/LeafletMap";
+import dynamic from "next/dynamic";
 
 interface ParkingsProps {
     data: ParkingData[];
     onParkingSelected: (parkingId: string) => void;
 }
+
+const DynamicLeafletMapComponent = dynamic(() => import('@/common/components/LeafletMap'), { ssr: false });
 
 export function Parkings({data, onParkingSelected}: ParkingsProps) {
     const parkings = data;
@@ -54,14 +57,9 @@ export function Parkings({data, onParkingSelected}: ParkingsProps) {
             </div>
             <div className="mt-24 flex w-[50%] px-2">
                 {
-                    parkings.length > 0 && <LeafletMap locations={markers} locationClicked={nomParking} />
+                    parkings.length > 0  && <DynamicLeafletMapComponent locations={markers} locationClicked={nomParking} />
                 }
             </div>
-            {/* <div className="w-[500px] h-screen mt-24 px-2">
-                {
-                    parkings.length > 0 && <LeafletMap locations={markers} locationClicked={nomParking} />
-                }
-            </div> */}
         </div>
     )
     

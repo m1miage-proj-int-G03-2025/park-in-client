@@ -1,9 +1,9 @@
 "use client";
 import { searchParkings } from "@/common/services/parkingsService";
-import { Suspense, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { Parkings } from "./components/Parkings";
 import ParkingSkeleton from "./components/ParkingSkeleton";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { ParkingData } from "./components/Parking";
 
 export interface ParkingsParams {
@@ -13,7 +13,9 @@ export interface ParkingsParams {
     typeVoiture: string;
 }
 
-export default function ParkingsView(params: ParkingsParams) {
+export default function ParkingsView() {
+    const searchParams = useSearchParams();
+    const searchQuery = searchParams.get('searchQuery');
     const [parkings, setParkings] = useState<ParkingData[]>([]);
     const [loading, setLoading] = useState(true);
     const router = useRouter();
@@ -21,20 +23,19 @@ export default function ParkingsView(params: ParkingsParams) {
     useEffect(() => {
         async function fetchParkings() {
             try {
-                const response = await searchParkings(params);
+                const response = await searchParkings(JSON.parse(searchQuery!));
                 setParkings(response);
-              } catch (error) {
+            } catch (error) {
                 console.error('Error fetching parkings:', error);
-              } finally {
+            } finally {
                 setLoading(false);
-              }
+            }
         }
         fetchParkings();
-    }, [params]);
+    }, []);
 
     const handleParkingSelected = (parkingId: string) => {
-        const queryString = encodeURIComponent(JSON.stringify(params));
-        router.push(`/parkings/${parkingId}?searchQuery=${queryString}`)
+        router.push(`/parkings/${parkingId}?searchQuery=${searchQuery}`)
     };
 
     return (
@@ -42,9 +43,7 @@ export default function ParkingsView(params: ParkingsParams) {
             {loading ? (
                 <ParkingSkeleton />
             ) : (
-                <Suspense fallback={<ParkingSkeleton />}>
-                    <Parkings data={parkings} onParkingSelected={handleParkingSelected} />
-                </Suspense>
+                <Parkings data={parkings} onParkingSelected={handleParkingSelected} />
             )}
         </div>
     );
