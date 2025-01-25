@@ -1,4 +1,4 @@
-import Icon from "@/common/components/icon";
+import Icon from "@/common/components/iconElement";
 import { colors } from "@/common/constants/colors";
 import * as MaterialIcons from "react-icons/md";
 
