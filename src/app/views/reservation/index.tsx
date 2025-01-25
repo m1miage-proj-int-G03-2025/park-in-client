@@ -5,44 +5,95 @@ import DetailsInfo from "./components/detailsInfo";
 import QRCode from "react-qr-code";
 import { MdLocationPin } from "react-icons/md";
 import { FiCheckCircle } from "react-icons/fi";
-import { RxCross2, RxLapTimer } from "react-icons/rx";
+import { RxCross2 } from "react-icons/rx";
 import { Button } from "@heroui/react";
+import { Image } from "@heroui/image"
+import { useParams } from "next/navigation";
+import { useEffect, useMemo, useState } from "react";
+import { cancelReservation, getReservationDetails } from "@/services/reservationsService";
+import { useLoading } from "@/contexts/loadingContext";
+import getReservationStatusIcon from "@/utils/reservation-icon-helper";
+import { getTypeVoitureByKey } from "@/utils/enum-key-helper";
+import { colors } from "@/constants/colors";
 
-export const reservation = {
-    idReservation: 12345,
-    statut: "confirmé",
-    tarif: 15.0,
-    dateDebut: "2025-01-22T09:00:00Z",
-    dateFin: "2025-01-22T17:00:00Z",
-    nomParking: "Parking Central",
-    adresseParking: "123 Rue Principale, 38000 Grenoble",
-    typePlace: "voiture",
-    numeroPlace: "1-1-A-185"
-};
+interface ReservationDetails {
+    idReservation: number;
+    statut: string;
+    tarif: number;
+    dateDebut: string;
+    dateFin: string;
+    nomParking: string;
+    adresseParking: string;
+    typePlace: string;
+    numeroPlace: string;
+}
 
 export default function ReservationView() {
-    const details = reservation;
 
-    const heureDebut = dayjs(details.dateDebut).utc().format('HH[h]mm');
-    const heureFin = dayjs(details.dateFin).utc().format('HH[h]mm');
-    const [bloc, etage, aile, numero] = details.numeroPlace.split("-");
-    const dateDebut = dayjs(details.dateDebut).tz('Europe/Paris').format('dddd, DD MMMM');
-    const dateFin = dayjs(details.dateFin).tz('Europe/Paris').format('dddd, DD MMMM');
+    const [details, setDetails] = useState<ReservationDetails | null>(null);
+    const { reservationId } = useParams();
+    const { setIsLoading } = useLoading()
+
+    const fetchDetailsReservation = async () => {
+        setIsLoading(true)
+        if (reservationId) {
+            await getReservationDetails(parseInt(reservationId as string)).then(({ data }) => {
+                setDetails(data)
+            }).finally(() => {
+                setIsLoading(false)
+            })
+        }
+    }
+
+    const handleCancelReservation = async () => {
+        if (!reservationId) return;
+        setIsLoading(true)
+        await cancelReservation(parseInt(reservationId as string)).then(() => {
+            fetchDetailsReservation()
+        }).finally(() => {
+            setIsLoading(false)
+        })
+    }
+
+    const heureDebut = useMemo(() => {
+        return dayjs(details?.dateDebut).utc().format('HH[h]mm');
+    }, [details]);
+
+    const heureFin = useMemo(() => {
+        return dayjs(details?.dateFin).utc().format('HH[h]mm');
+    }, [details]);
+
+    const [, , , bloc, etage, aile, numero] = useMemo(() => {
+        return details?.numeroPlace.split("-") || [];
+    }, [details]);
+
+    const dateDebut = useMemo(() => {
+        return dayjs(details?.dateDebut).tz('Europe/Paris').format('dddd, DD MMMM');
+    }, [details]);
+
+    const dateFin = useMemo(() => {
+        return dayjs(details?.dateFin).tz('Europe/Paris').format('dddd, DD MMMM');
+    }, [details]);
+
+    useEffect(() => {
+        fetchDetailsReservation()
+    }, [])
+
 
     return (
-        <div className="flex">
-            <div className="flex w-screen pt-28">
-                <div className="flex w-[70%] px-8">
+        details && <div className="flex justify-center items-center">
+            <div className="flex w-screen pt-28  justify-center items-center">
+                <div className="flex w-[70%] px-8  justify-center items-center">
                     <div className="flex flex-col w-full bg-white shadow-lg rounded-3xl py-6 pl-6 pr-12">
                         <div className="flex mb-8">
                             <div className="flex flex-col w-2/3 px-6">
                                 <div className="flex mb-8 justify-between">
                                     <DetailsInfo title="ID de reservation" value={details.idReservation} className="w-44" />
-                                    <DetailsInfo title="Type de place" value={details.typePlace} className="w-44" />
+                                    <DetailsInfo title="Type de place" value={getTypeVoitureByKey(details.typePlace)} className="w-44" />
                                 </div>
                                 <div className="flex mb-8 justify-between">
                                     <DetailsInfo title="Paiement" value={details.tarif} currency="&euro;" className="w-44" />
-                                    <DetailsInfo title="Statut" value={details.statut} className="w-44" />
+                                    <DetailsInfo title="Statut" value={getReservationStatusIcon(details.statut).label} className="w-44" />
                                 </div>
 
                                 <div className="flex mt-10 justify-center items-center">
@@ -51,7 +102,7 @@ export default function ReservationView() {
                                         <div className="text-slate-500 text-sm">{dateDebut}</div>
                                     </div>
                                     <div className="flex border-2 border-slate-300 h-1 w-52 border-dashed justify-center items-center">
-                                        <RxLapTimer size={25} />
+                                        <Image src="../../logo-transp-bg.png" alt="logo" className="w-10 h-10" />
                                     </div>
                                     <div>
                                         <DetailsInfo title="Sortir avant" value={heureFin} />
@@ -61,8 +112,8 @@ export default function ReservationView() {
                             </div>
 
                             <div className="flex flex-col w-1/3 h-full items-center">
-                                <div>
-                                    <QRCode value={details.numeroPlace} fgColor="#2b77c4" />
+                                <div className="p-8 shadow-xl rounded-sm">
+                                    <QRCode value={details.numeroPlace} fgColor={details.statut == "PLANIFIEE" || details.statut == 'ENCOURS' ? "black" : colors.darkGrey} />
                                 </div>
                                 <div className="flex flex-col items-center mt-4">
                                     <DetailsInfo className="font-semibold" title="N° Place" value={numero} />
@@ -87,18 +138,18 @@ export default function ReservationView() {
                 </div>
                 <div className="w-[30%] flex flex-col justify-center items-center px-14">
                     {
-                        details.statut === "confirmé" && (
+                        details.statut === "PLANIFIEE" && (
                             <div className="flex flex-col justify-center items-center">
                                 <div className="text-2xl text-[#449A1D] mb-4">Reservation confirmée</div>
                                 <FiCheckCircle size={100} color="#449A1D" />
                                 <div className="text-slate-500 text-2xl mt-8">
-                                    <Button className="bg-[#FF0000] px-3 py-2 rounded-full text-xl font-semibold text-white">Annuler</Button>
+                                    <Button className="bg-[#FF0000] px-3 py-2 rounded-full text-xl font-semibold text-white" onPress={handleCancelReservation}>Annuler</Button>
                                 </div>
                             </div>
                         )
                     }
                     {
-                        details.statut === "annulé" && (
+                        details.statut === "ANNULEE" && (
                             <div className="flex flex-col justify-center items-center">
                                 <div className="text-2xl text-[#FF0000] mb-4">Reservation annulée</div>
                                 <RxCross2 size={100} color="#FF0000" />
