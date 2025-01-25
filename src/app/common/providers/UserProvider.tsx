@@ -1,4 +1,4 @@
-import { UserContext } from "@/contexts/userContext";
+import { UserContext } from "@/common/contexts/userContext";
 import { ReactNode, useContext, useEffect, useState } from "react";
 
 export const UserProvider = ({ children }: { children: ReactNode }) => {

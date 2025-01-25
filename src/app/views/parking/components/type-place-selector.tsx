@@ -1,6 +1,6 @@
-import { typesOpts } from "@/constants/typesOpts";
+import { typesOpts } from "@/common/constants/typesOpts";
 import SelectorCard from "./selector-card";
-import getPlaceIcon from "@/utils/place-iconname-helper";
+import getPlaceIcon from "@/common/utils/place-iconname-helper";
 
 interface TypePlaceSelectorProps {
   selectedTypePlace: string;

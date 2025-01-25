@@ -2,11 +2,11 @@ import { Suspense, useEffect, useState } from "react";
 import ReservationsSkeleton from "./components/reservation-skeleton";
 import ListElement from "./components/list-element";
 import { useRouter } from "next/navigation";
-import { getUserReservations } from "@/services/userService";
-import { useUserContext } from "@/providers/UserProvider";
-import { useLoading } from "@/contexts/loadingContext";
-import { getTypeVoitureByKey } from "@/utils/enum-key-helper";
-import { cancelReservation } from "@/services/reservationsService";
+import { getUserReservations } from "@/common/services/userService";
+import { useUserContext } from "@/common/providers/UserProvider";
+import { useLoading } from "@/common/contexts/loadingContext";
+import { getTypeVoitureByKey } from "@/common/utils/enum-key-helper";
+import { cancelReservation } from "@/common/services/reservationsService";
 interface Reservation {
     idReservation: number;
     dateDebut: Date;
@@ -34,10 +34,14 @@ const ReservationsListView = () => {
             setIsLoading(true);
             try {
                 const response = await getUserReservations(userId);
-                setReservations(response.map((res) => ({
-                    ...res,
-                    typeVoiture: getTypeVoitureByKey(res.typeVoiture),
-                })));
+                setReservations(
+                    response.map((res) => ({
+                        ...res,
+                        dateDebut: new Date(res.heureDebut),
+                        dateFin: new Date(res.heureFin),
+                        typeVoiture: getTypeVoitureByKey(res.typeDePlaceEnum),
+                    })).sort((a, b) => b.dateDebut.getTime() - a.dateFin.getTime()) 
+                );
             } catch (error) {
                 console.error("Error fetching reservations:", error);
             } finally {

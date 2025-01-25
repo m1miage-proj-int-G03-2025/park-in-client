@@ -1,4 +1,4 @@
-import getPlaceIcon from "@/utils/place-iconname-helper";
+import getPlaceIcon from "@/common/utils/place-iconname-helper";
 import SelectorCard from "./selector-card";
 
 interface PlaceSelectorProps {

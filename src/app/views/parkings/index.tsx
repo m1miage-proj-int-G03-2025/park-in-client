@@ -1,5 +1,5 @@
 "use client";
-import { searchParkings } from "@/services/parkingsService";
+import { searchParkings } from "@/common/services/parkingsService";
 import { Suspense, useEffect, useState } from "react";
 import { Parkings } from "./components/Parkings";
 import ParkingSkeleton from "./components/ParkingSkeleton";

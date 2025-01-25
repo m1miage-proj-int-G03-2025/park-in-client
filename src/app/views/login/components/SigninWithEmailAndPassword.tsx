@@ -5,7 +5,7 @@ import { Image } from "@heroui/image";
 import { Form } from "@heroui/form";
 import { useState } from "react";
 import { signInWithEmailAndPassword } from "firebase/auth";
-import { auth } from "@/configs/firebaseConfig";
+import { auth } from "@/common/configs/firebaseConfig";
 
 export default function SignInWithEmailAndPassword() {
     const [email, setEmail] = useState("");

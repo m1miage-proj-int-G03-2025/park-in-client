@@ -2,23 +2,23 @@
 import { useEffect, useMemo, useState } from "react";
 import PlaceSelector from "./components/place-selector";
 import TypePlaceSelector from "./components/type-place-selector";
-import InputField from "@/components/inputField";
-import { colors } from "@/constants/colors";
-import { timeOpts } from "@/constants/timeOpts";
+import InputField from "@/common/components/inputField";
+import { colors } from "@/common/constants/colors";
+import { timeOpts } from "@/common/constants/timeOpts";
 import TotalPriceBar from "./components/total-price";
 import InfoField from "./components/info-field";
 import ReservationDetailsModal from "./components/reservation-details-modal";
 import { useParams, useSearchParams } from "next/navigation";
 import { useRouter } from "next/navigation";
 import { Accordion, AccordionItem, Skeleton } from "@heroui/react";
-import { getParkingDetails, getPlacesDisponibles, reservePlace } from "@/services/parkingsService";
-import { useLoading } from "@/contexts/loadingContext";
-import { getTypeVoitureByKey } from "@/utils/enum-key-helper";
+import { getParkingDetails, getPlacesDisponibles, reservePlace } from "@/common/services/parkingsService";
+import { useLoading } from "@/common/contexts/loadingContext";
+import { getTypeVoitureByKey } from "@/common/utils/enum-key-helper";
 import dynamic from "next/dynamic";
-import { useUserContext } from "@/providers/UserProvider";
+import { useUserContext } from "@/common/providers/UserProvider";
 import { MdCalendarToday, MdSchedule, MdStairs } from "react-icons/md";
 
-const LeafletMap = dynamic(() => import('@/components/LeafletMap'), {
+const LeafletMap = dynamic(() => import('@/common/components/LeafletMap'), {
   ssr: false,
 });
 

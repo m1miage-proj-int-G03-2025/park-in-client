@@ -3,7 +3,7 @@ import { Button } from "@heroui/button";
 import { useRouter } from 'next/navigation'
 import BlockInfo from "./components/block-info";
 import { BsSendFill } from "react-icons/bs";
-import WaveElement from "@/components/wave-element";
+import WaveElement from "@/common/components/wave-element";
 
 const blockInfos = [
     { icon: "recherche.png", paddingTop: 0, title: "Rechercher des parkings", text: "Plus de 200.000 places de parking disponibles dans les départements et villes de France" },

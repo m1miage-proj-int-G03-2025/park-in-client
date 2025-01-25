@@ -1,12 +1,12 @@
-import fetchStream from "@/configs/fetchStreamConfig";
+import fetchStream from "@/common/configs/fetchStreamConfig";
 
 const serverUrl = process.env.NEXT_PUBLIC_SERVER_URL;
 
 interface ReservationDetails {
     idReservation : number,
-    dateDebut : Date,
-    dateFin : Date,
-    typeVoiture : string,
+    heureDebut : Date,
+    heureFin : Date,
+    typeDePlaceEnum : string,
     nomParking : string,
     adresseParking : string,
     statut: string,

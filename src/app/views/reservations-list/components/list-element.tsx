@@ -1,6 +1,6 @@
-import Icon from "@/components/icon";
-import getPlaceType from "@/utils/place-icon-helper";
-import getReservationStatusIcon from "@/utils/reservation-icon-helper";
+import Icon from "@/common/components/icon";
+import getPlaceType from "@/common/utils/place-icon-helper";
+import getReservationStatusIcon from "@/common/utils/reservation-icon-helper";
 import { Button } from "@heroui/button";
 import { Image } from "@heroui/image";
 import { FaLocationDot } from "react-icons/fa6";

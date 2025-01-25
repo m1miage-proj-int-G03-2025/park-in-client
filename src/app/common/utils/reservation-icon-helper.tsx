@@ -1,4 +1,4 @@
-import { colors } from "@/constants/colors";
+import { colors } from "@/common/constants/colors";
 
 const getReservationStatusIcon = (status: string) => { 
     switch(status) {

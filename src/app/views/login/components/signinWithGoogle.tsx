@@ -2,7 +2,7 @@
 import React from "react";
 import { Button } from "@heroui/button";
 import { Image } from "@heroui/image";
-import { auth } from "@/configs/firebaseConfig";
+import { auth } from "@/common/configs/firebaseConfig";
 import { GoogleAuthProvider, signInWithPopup } from "firebase/auth";
 
 

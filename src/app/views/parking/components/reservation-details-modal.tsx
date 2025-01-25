@@ -1,8 +1,8 @@
 import { Modal, ModalBody, ModalContent, ModalFooter, Button, ModalHeader } from "@heroui/react";
 import { useMemo } from "react";
 import InfoField from "./info-field";
-import { timeOpts } from "@/constants/timeOpts";
-import { colors } from "@/constants/colors";
+import { timeOpts } from "@/common/constants/timeOpts";
+import { colors } from "@/common/constants/colors";
 import { MdInfo } from "react-icons/md";
 
 interface ReservationDetailsModalProps {

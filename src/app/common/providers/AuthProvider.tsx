@@ -2,7 +2,7 @@
 import { useContext, useEffect, useState, ReactNode } from "react";
 import { onIdTokenChanged, User } from "firebase/auth";
 import { AuthContext, AuthContextType } from "../contexts/authContext";
-import { auth } from "@/configs/firebaseConfig";
+import { auth } from "@/common/configs/firebaseConfig";
 
 export default function AuthProvider({ children}: { children: ReactNode }) {
     const [user, setUser] = useState<User | null>(null);
