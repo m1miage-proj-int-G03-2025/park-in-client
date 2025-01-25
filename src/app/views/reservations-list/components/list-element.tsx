@@ -1,8 +1,10 @@
+import Icon from "@/components/icon";
 import getPlaceType from "@/utils/place-icon-helper";
 import getReservationStatusIcon from "@/utils/reservation-icon-helper";
 import { Button } from "@heroui/button";
 import { Image } from "@heroui/image";
 import { FaLocationDot } from "react-icons/fa6";
+import * as MaterialIcons from "react-icons/md";
 
 interface ListElementProps {
     idReservation: number,
@@ -36,7 +38,9 @@ const ListElement = ({ idReservation, dateDebut, dateFin, typeVoiture, nomParkin
 
     return (
         <div className="flex bg-white rounded-xl w-full p-6 2xl:p-7 my-3 shadow-xl cursor-pointer" onClick={() => handleReservationClicked(idReservation)}>
-            <div className="">{getReservationStatusIcon(statut)}</div>
+            <div className="">
+            <div className=""> <Icon name={getReservationStatusIcon(statut).icon as keyof typeof MaterialIcons} size={43} color={getReservationStatusIcon(statut).color}/></div>
+            </div>
             <div className="flex flex-col justify-between pl-4 pr-2">
                 <div className="flex flex-col">
                     <div className="text-xs 2xl:text-xl font-semibold mb-3">{formatDate(dateDebut)}</div>

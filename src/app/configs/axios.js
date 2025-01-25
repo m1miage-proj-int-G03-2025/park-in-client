@@ -2,6 +2,7 @@ import originalAxios from 'axios';
 
 export const axios = originalAxios.create({
     baseURL: process.env.NEXT_PUBLIC_SERVER_URL, 
+    maxRedirects: 5
 });
 
 export const setupInterceptor = () => {
