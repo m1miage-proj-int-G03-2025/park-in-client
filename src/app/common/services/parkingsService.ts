@@ -30,7 +30,6 @@ export async function getParkingDetails(id: string): Promise<{
     yLatitude: number,
 }> {
     const response = await axios.get(`parkings/${id}`);
-    console.log(response.data);
     return response.data;
 }
 
@@ -56,9 +55,9 @@ export async function reservePlace(data: { numeroPlace: string, idUtilisateur: s
             dateDebut: heureDebut,
             dateFin: heureFin,
           }
-          const response = await axios(`/parkings/${data.idParking}/place`, {params});
-          console.log(response.data);
+            await axios(`/parkings/${data.idParking}/place`, {params}).then((response) => {
         data.numeroPlace = response.data.numeroPlace
+            })
     }
 
     const body = {

@@ -18,8 +18,7 @@ export default function LoginView() {
     const {user} = useAuth()
     const {setIsLoading} = useLoading()
 
-    const handleReservePlace = async (data: {numeroPlace: string, idUtilisateur: string, dateDebut: string, duree: string, typePlace: string}) => {
-        console.log(data)
+    const handleReservePlace = async (data: {numeroPlace: string, idUtilisateur: string, dateDebut: string, duree: string, typePlace: string, idParking: string}) => {
         await reservePlace(data).then((response) => {
             router.push(`/reservations/${response[0].id}`)
         })
@@ -29,17 +28,17 @@ export default function LoginView() {
         if(user?.email) {
         setIsLoading(true)
         await getUserData(user.email).then((data) => {
-            console.log(data)
             addUser(data[0].idUtilisateur)
-            if(searchQuery) {
-                const {idPlace,date, duree, typePlace } = JSON.parse(searchQuery)
+            if(isInitialized && searchQuery) {
+                const {idPlace,date, duree, typePlace, idParking } = JSON.parse(searchQuery)
                 if (isInitialized && userId) {
                     const data = {
-                        numeroPlace: idPlace,
+                        numeroPlace: idPlace || "",
                         idUtilisateur: userId,
                         dateDebut:date,
                         duree: duree,
-                        typePlace
+                        typePlace,
+                        idParking,
                     }
                     handleReservePlace(data)
                 } else {

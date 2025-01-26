@@ -135,6 +135,7 @@ const ParkingView = () => {
         date: reservationInfo?.date,
         duree: reservationInfo?.duree,
         typePlace: selectedPlace?.typePlace,
+        idParking: parkingId,
       }));
       router.push(`/login?searchQuery=${queryString}`);
     }
@@ -189,7 +190,6 @@ const ParkingView = () => {
     ];
   }, [reservationInfo]);
 
-  console.log(tarifTot)
 
 
   const blocOptions = useMemo(() => {
