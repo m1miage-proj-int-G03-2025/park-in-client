@@ -26,6 +26,7 @@ export async function getParkingDetails(id: string): Promise<{
     tarif2h: number,
     tarif3h: number,
     tarif4h: number,
+    tarif24h: number,
     xLongitude: number,
     yLatitude: number,
 }> {

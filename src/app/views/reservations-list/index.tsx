@@ -10,7 +10,7 @@ import { cancelReservation } from "@/common/services/reservationsService";
 import { Pagination } from "@heroui/react";
 
 interface Reservation {
-    idReservation: number;
+    idReservation: string;
     dateDebut: Date;
     dateFin: Date;
     typeVoiture: string;
@@ -28,7 +28,7 @@ const ReservationsListView = () => {
     const { setIsLoading } = useLoading();
     const { userId, isInitialized } = useUserContext();
 
-    const handleReservationClick = (id: number) => {
+    const handleReservationClick = (id: string) => {
         router.push(`/reservations/${id}`);
     };
 
@@ -57,7 +57,7 @@ const ReservationsListView = () => {
         }
     };
 
-    const handleCancelReservation = async (id: number) => {
+    const handleCancelReservation = async (id: string) => {
         setIsLoading(true);
         await cancelReservation(id)
             .then(() => {

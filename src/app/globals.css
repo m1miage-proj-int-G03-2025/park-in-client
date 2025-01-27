@@ -19,3 +19,9 @@ body {
   background: var(--background);
   font-family: Arial, Helvetica, sans-serif;
 }
+.custom-datepicker-wrapper .time-selector.selected {
+  background-color: #00796B !important;
+  color: #FFFFFF !important;
+}
+
+

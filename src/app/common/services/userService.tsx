@@ -3,7 +3,7 @@ import fetchStream from "@/common/configs/fetchStreamConfig";
 const serverUrl = process.env.NEXT_PUBLIC_SERVER_URL;
 
 interface ReservationDetails {
-    idReservation : number,
+    idReservation : string,
     heureDebut : Date,
     heureFin : Date,
     typeDePlaceEnum : string,

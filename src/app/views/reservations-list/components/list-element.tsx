@@ -7,15 +7,15 @@ import { FaLocationDot } from "react-icons/fa6";
 import * as MaterialIcons from "react-icons/md";
 
 interface ListElementProps {
-    idReservation: number,
+    idReservation: string,
     dateDebut: Date,
     dateFin: Date,
     typeVoiture: string,
     nomParking: string,
     adresseParking: string,
     statut: string,
-    handleReservationClicked: (resId: number) => void
-    onCancelClick: (resId: number) => void
+    handleReservationClicked: (resId: string) => void
+    onCancelClick: (resId: string) => void
 }
 const ListElement = ({ idReservation, dateDebut, dateFin, typeVoiture, nomParking, adresseParking, statut, handleReservationClicked, onCancelClick }: ListElementProps) => {
 

@@ -6,6 +6,8 @@ import { setupInterceptor} from "@/common/configs/axios"
 import { LoadingProvider } from "@/common/contexts/loadingContext"
 import { UserProvider } from "./UserProvider"
 import { ErrorProvider } from "@/common/contexts/errorContext"
+import { LocalizationProvider } from '@mui/x-date-pickers';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs'
 
 export function Providers({children}: { children: React.ReactNode }) {
   useEffect(() => {
@@ -13,6 +15,7 @@ export function Providers({children}: { children: React.ReactNode }) {
   }, [])
   return (
     <HeroUIProvider>
+      <LocalizationProvider dateAdapter={AdapterDayjs}>
       <ErrorProvider>
       <LoadingProvider>
       <AuthProvider>
@@ -22,6 +25,7 @@ export function Providers({children}: { children: React.ReactNode }) {
       </AuthProvider>
       </LoadingProvider>
       </ErrorProvider>
+      </LocalizationProvider>
     </HeroUIProvider>
   )
 }

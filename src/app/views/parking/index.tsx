@@ -38,6 +38,7 @@ const ParkingView = () => {
     tarif2h: 0,
     tarif3h: 0,
     tarif4h: 0,
+    tarif24h: 0,
     xLongitude: 0,
     yLatitude: 0,
   });
@@ -158,6 +159,8 @@ const ParkingView = () => {
         return parkingDetails?.tarif3h;
       case "240":
         return parkingDetails?.tarif4h;
+      case "1440":
+        return parkingDetails?.tarif24h;
       default:
         return 0;
     }
