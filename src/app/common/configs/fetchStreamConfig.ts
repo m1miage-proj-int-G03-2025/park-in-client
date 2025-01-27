@@ -11,7 +11,9 @@ async function fetchStream<T, U, B>(urlString: string, params?: FetchStreamParam
 
     const response = await fetch(url, {
       method: params?.methode || 'GET',
-      headers: { 'Content-Type': 'application/json' },
+      headers: { 'Content-Type': 'application/json',
+        'ngrok-skip-browser-warning': 'true'
+       },
       body: params?.body ? JSON.stringify(params.body) : undefined,
 
     });
