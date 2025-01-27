@@ -13,6 +13,7 @@ const blockInfos = [
 
 export default function LandingView() {
     const router = useRouter();
+
     return (
         <div className="flex flex-col h-screen">
             <div className="flex h-screen w-screen justify-center items-center z-10">

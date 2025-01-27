@@ -1,7 +1,10 @@
 import { colors } from "@/common/constants/colors";
-import { Autocomplete, AutocompleteItem, DatePicker, Input, Select, SelectItem } from "@heroui/react";
+import { Autocomplete, AutocompleteItem, Input, Select, SelectItem } from "@heroui/react";
+import { InputAdornment, TextField } from "@mui/material";
+import { CalendarIcon, DateTimePicker } from "@mui/x-date-pickers";
+import { frFR } from "@mui/x-date-pickers/locales";
+import dayjs from "dayjs";
 import React, { useMemo } from "react";
-import { fromDate, getLocalTimeZone, today, toZoned } from '@internationalized/date';
 
 interface InputFieldProps {
   label: string;
@@ -76,7 +79,6 @@ const InputField = (props: InputFieldProps) => {
               color: labelColor
             }}>{label}</span>}
             isDisabled={disabled}
-            size="lg"
             placeholder={placeholder}
             required={required}
             defaultSelectedKeys={[value as string]}
@@ -99,40 +101,51 @@ const InputField = (props: InputFieldProps) => {
           <div>
             <span className="text-white !bg-transparent font-bold text-lg" style={{
               color: disabled ? '#95BBE1' : labelColor,
-              marginTop: '-7px',
-              marginBottom: '7px',
+              marginTop: '-12px',
+              marginBottom: '9px',
               display: 'block'
             }}>{label}</span>
-            <DatePicker
-              hideTimeZone
-              hourCycle={24}
-              granularity="minute"
-              minValue={typeof window === undefined ? today(getLocalTimeZone()) : today(getLocalTimeZone())}
-              className="bg-white rounded-lg shadow-lg p-0 m-0"
-              value={
-                value instanceof Date && !isNaN(value.getTime())
-                  ? toZoned(fromDate(value, getLocalTimeZone()), getLocalTimeZone())
-                  : toZoned(fromDate(new Date(), getLocalTimeZone()), getLocalTimeZone())
-              }
-              size="lg"
-              isRequired={required}
-              isInvalid={error}
-              errorMessage={errorMessage}
+            <DateTimePicker
+              minDate={dayjs(new Date())}
+              value={dayjs(value as Date)}
+              className="bg-white rounded-lg shadow-xl overflow-hidden"
+              disablePast={true}
+              sx={{
+                "& .MuiOutlinedInput-root": {
+                  backgroundColor: "white",
+                  width: "330.67px",
+                  height: "40px",
+                  borderRadius: "0.4rem",
+                  padding: "0.5rem 1rem",
+                  borderColor: "transparent",
+                  marginTop: "-0.04rem",
+                },
+                "& .MuiOutlinedInput-notchedOutline": {
+                  border: "none"
+
+                },
+              }}
+              defaultValue={dayjs(value as Date)}
               onChange={(newValue) => {
                 if (newValue) {
-                  const selectedDate = newValue.toDate();
-                  handleInputChange(selectedDate);
+                  const selectedDate = newValue;
+                  handleInputChange(selectedDate.toDate());
                 }
               }}
-              color={disabled ? "default" : "primary"}
-              isDisabled={disabled}
-              startContent={icon}
-              labelPlacement="outside"
-              selectorIcon={icon}
-              selectorButtonPlacement="start"
+              slots={{
+                openPickerIcon: () => <InputAdornment position="start"> <CalendarIcon color="primary" /> </InputAdornment>
+              }}
+              slotProps={{
+                inputAdornment: {
+                  position: "start",
+                }
+              }}
+              ampm={false}
+              disabled={disabled}
               aria-label={label}
+              closeOnSelect={false}
             />
-          </div>
+            </div>
         )
       }
       case "auto-complete": {
