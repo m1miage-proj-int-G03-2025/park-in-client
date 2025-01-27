@@ -1,4 +1,4 @@
-import Icon from "@/common/components/icon";
+import Icon from "@/common/components/iconElement";
 import getPlaceType from "@/common/utils/place-icon-helper";
 import getReservationStatusIcon from "@/common/utils/reservation-icon-helper";
 import { Button } from "@heroui/button";

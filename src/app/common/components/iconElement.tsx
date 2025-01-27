@@ -12,11 +12,11 @@ interface IconProps {
 const Icon = (props: IconProps) => {
   const { name, size = 24, color = colors.main, style } = props;
 
-  const IconComponent = MaterialIcons[name]; 
+  const IconComponent = MaterialIcons[name ?? "MdQuestionMark"]; 
 
   if (!IconComponent) {
     console.error(`Icon "${name}" does not exist in Material Community Icons.`);
-    return <MaterialIcons.MdQuestionMark size={size} color={color} style={style} />
+    return null;
   }
 
   return <IconComponent size={size} color={color} style={style}/>;
