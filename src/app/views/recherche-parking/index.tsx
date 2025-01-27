@@ -13,7 +13,7 @@ const RechercheParkingView = () => {
   const route = useRouter()
   const [reservationInfo, setReservationInfo] = useState({
     inseeVille: "",
-    date: typeof window === 'undefined' ? new Date() : null,
+    date: new Date(),
     duree: "",
     typeVoiture: "",
   });
