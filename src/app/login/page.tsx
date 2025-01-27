@@ -1,7 +1,10 @@
-"use client";
-
+import { Suspense } from "react";
 import LoginView from "../views/login";
 
 export default function LoginPage() {
-    return <LoginView />;
+    return (
+        <Suspense>
+            <LoginView />
+        </Suspense>
+    );
 }

@@ -1,9 +1,10 @@
 "use client";
 import React from "react";
-import { Button } from "@nextui-org/button";
-import { Image } from "@nextui-org/image";
-import { auth } from "../../../../../firebaseConfig";
+import { Button } from "@heroui/button";
+import { Image } from "@heroui/image";
+import { auth } from "@/common/configs/firebaseConfig";
 import { GoogleAuthProvider, signInWithPopup } from "firebase/auth";
+
 
 export default function SignInWithGoogle() {
     const handleLogin = async () => {
@@ -19,11 +20,11 @@ export default function SignInWithGoogle() {
         <div className="flex flex-col">
             <div>
                 <Button 
-                    className="max-w-xs w-72 font-medium" 
-                    variant="bordered" 
+                    className="max-w-xs w-72 font-medium border-slate-400" 
+                    variant="bordered"
                     size="lg"
                     onPress={handleLogin}
-                    startContent={<Image alt="google logo" src="https://fonts.gstatic.com/s/i/productlogos/googleg/v6/24px.svg"/>}>
+                    startContent={<Image alt="google image" src="https://fonts.gstatic.com/s/i/productlogos/googleg/v6/24px.svg"/>}>
                         Se connecter avec Google
                 </Button>
             </div>

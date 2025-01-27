@@ -1,10 +1,11 @@
-import { Input } from "@nextui-org/input";
-import { Button } from "@nextui-org/button";
-import { Image } from "@nextui-org/image";
-import { Form } from "@nextui-org/form";
+"use client";
+import { Input } from "@heroui/input";
+import { Button } from "@heroui/button";
+import { Image } from "@heroui/image";
+import { Form } from "@heroui/form";
 import { useState } from "react";
 import { signInWithEmailAndPassword } from "firebase/auth";
-import { auth } from "../../../../../firebaseConfig";
+import { auth } from "@/common/configs/firebaseConfig";
 
 export default function SignInWithEmailAndPassword() {
     const [email, setEmail] = useState("");
@@ -44,7 +45,7 @@ export default function SignInWithEmailAndPassword() {
                 <div className="flex flex-col my-2">
                     <Input
                         isRequired
-                        className="max-w-xs w-72"
+                        className="max-w-xs w-72 border-slate-400"
                         errorMessage="Mot de passe invalide"
                         isInvalid={invalid}
                         label="Mot de passe"
@@ -53,8 +54,8 @@ export default function SignInWithEmailAndPassword() {
                         value={password} onValueChange={setPassword}
                         endContent={
                             <Image 
-                                className="cursor-pointer"
                                 alt="password visibility"
+                                className="cursor-pointer"
                                 src={isPasswordVisible ? "/eye.png": "/eyeoff.png"} 
                                 width={24} 
                                 onClick={() => setIsPasswordVisible(!isPasswordVisible)}/>
@@ -63,7 +64,7 @@ export default function SignInWithEmailAndPassword() {
                 </div>
 
                 <div>
-                    <Button type="submit" className="w-72" color="primary">Connexion</Button>
+                    <Button type="submit" className="w-72 text-white" color="primary">Connexion</Button>
                 </div>
             </Form>
         </div>
