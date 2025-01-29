@@ -2,7 +2,6 @@
 import { Button } from "@heroui/button";
 import { useRouter } from 'next/navigation';
 import LogoParkin from "./logoParkin";
-import { useAuth } from "@/common/providers/AuthProvider";
 import LoggedUserInfo from "./loggedUserInfo";
 import { signOut } from "firebase/auth";
 import { auth } from "@/common/configs/firebaseConfig";
@@ -17,13 +16,12 @@ const navs = [
 
 export default function NavBar() {
     const router = useRouter();
-    const { user } = useAuth();
-    const { addUser } = useUserContext()
+    const { addUserInfo, userInfo } = useUserContext()
     
     const handleLogout = async () => {
         try {
             await signOut(auth);
-            addUser(null);
+            addUserInfo(null);
 
         } catch (error) {
             console.error("Erreur de déconnexion avec Google: ", error);
@@ -38,7 +36,7 @@ export default function NavBar() {
                 </div>
                 <div className="flex justify-center w-2/6 font-semibold">
                     {
-                        navs.filter(nav => !nav.requiresLogin || (nav.requiresLogin && user != null))
+                        navs.filter(nav => !nav.requiresLogin || (nav.requiresLogin && userInfo != null))
                             .map((nav, index) => (
                                 <div key={index} className="mx-6"><Link href={nav.link} className="text-black">{nav.name}</Link></div>
                             ))
@@ -46,10 +44,10 @@ export default function NavBar() {
                 </div>
                 <div>
                     {
-                        (!user && <Button onPress={() => router.push("/login")} className="px-3 py-2 font-semibold mr-20 text-white" radius="full" color="primary">Se connecter</Button>)
+                        (!userInfo && <Button onPress={() => router.push("/login")} className="px-3 py-2 font-semibold mr-20 text-white" radius="full" color="primary">Se connecter</Button>)
                     }
                     {
-                        (user && <LoggedUserInfo user={user} onLogout={handleLogout} />)
+                        (userInfo && <LoggedUserInfo user={userInfo} onLogout={handleLogout} />)
                     }
                 </div>
             </div>

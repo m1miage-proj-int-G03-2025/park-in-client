@@ -1,4 +1,6 @@
 import fetchStream from "@/common/configs/fetchStreamConfig";
+import { axios } from "@/common/configs/axios";
+import { UserDetails } from "../types/user-details";
 
 const serverUrl = process.env.NEXT_PUBLIC_SERVER_URL;
 
@@ -12,10 +14,21 @@ interface ReservationDetails {
     statut: string,
 }
 
-export async function getUserData(email: string): Promise<{nom: string, prenom: string, idUtilisateur: string}[]> {
- return await fetchStream<unknown, {nom: string, prenom: string, idUtilisateur: string}, unknown>(`${serverUrl}/utilisateurs/${email}`);
+interface CreateUserParams {
+    nom: string;
+    prenom: string;
+    email: string;
+}
+
+export async function getUserData(email: string): Promise<UserDetails[]> {
+ return await fetchStream<unknown, UserDetails, unknown>(`${serverUrl}/utilisateurs/${email}`);
 }
 
 export async function getUserReservations(idUtilisateur: string): Promise<ReservationDetails[]> {
     return await fetchStream<unknown, ReservationDetails, unknown>(`${serverUrl}/utilisateurs/${idUtilisateur}/reservations`)
-  }
+}
+
+
+export async function createUser(createUserParams: CreateUserParams): Promise<UserDetails> {
+    return (await axios.post<UserDetails>(`${serverUrl}/utilisateurs`, {...createUserParams})).data;
+}

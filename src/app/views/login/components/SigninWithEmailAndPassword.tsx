@@ -1,30 +1,35 @@
 "use client";
 import { Input } from "@heroui/input";
 import { Button } from "@heroui/button";
-import { Image } from "@heroui/image";
 import { Form } from "@heroui/form";
 import { useState } from "react";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { auth } from "@/common/configs/firebaseConfig";
+import { SignInProps } from "./signinWithGoogle";
+import { FaRegEye, FaRegEyeSlash } from "react-icons/fa6";
+import { Spinner } from "@heroui/react";
 
-export default function SignInWithEmailAndPassword() {
+export default function SignInWithEmailAndPassword({ onSignIn }: SignInProps) {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
 
     const [isPasswordVisible, setIsPasswordVisible] = useState(false);
-
     const [invalid, setInvalid] = useState(false);
+    const [isLoading, setIsLoading] = useState(false);
 
     const handleSubmit = async (event: React.FormEvent) => {
         event.preventDefault();
+        setIsLoading(true);
         try {
-            await signInWithEmailAndPassword(auth, email, password);
+            const firebaseUser = await signInWithEmailAndPassword(auth, email, password);
             setInvalid(false);
+            onSignIn(firebaseUser.user.email!);
+            setIsLoading(false);
         } catch (error) {
             setInvalid(true);
             console.error("Erreur de connexion", error);
         }
-      };
+    };
 
     return (
         <div className="flex justify-center items-center">
@@ -53,18 +58,25 @@ export default function SignInWithEmailAndPassword() {
                         variant="bordered"
                         value={password} onValueChange={setPassword}
                         endContent={
-                            <Image 
-                                alt="password visibility"
-                                className="cursor-pointer"
-                                src={isPasswordVisible ? "/eye.png": "/eyeoff.png"} 
-                                width={24} 
-                                onClick={() => setIsPasswordVisible(!isPasswordVisible)}/>
+                            <div className="cursor-pointer" onClick={() => setIsPasswordVisible(!isPasswordVisible)}>
+                                {
+                                    isPasswordVisible
+                                        ? <FaRegEye size={24} />
+                                        : <FaRegEyeSlash size={24} />
+                                }
+                            </div>
                         }
                     />
                 </div>
 
                 <div>
-                    <Button type="submit" className="w-72 text-white" color="primary">Connexion</Button>
+                    <Button isDisabled={isLoading && true} type="submit" className="w-72 text-white" color="primary">
+                        {
+                            isLoading
+                                ? <Spinner size="md" color="default" />
+                                : "Connexion"
+                        }
+                    </Button>
                 </div>
             </Form>
         </div>
