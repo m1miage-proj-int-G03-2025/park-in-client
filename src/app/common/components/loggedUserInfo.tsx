@@ -2,11 +2,11 @@
 import { Avatar, AvatarIcon } from "@heroui/avatar";
 import { Popover, PopoverTrigger, PopoverContent } from "@heroui/popover";
 import { Button } from "@heroui/react";
-import { User } from "firebase/auth";
 import { AiOutlineLogout } from "react-icons/ai";
+import { UserDetails } from "../types/user-details";
 
 interface LoggedUserInfo {
-    user: User
+    user: UserDetails
     onLogout: () => void;
 }
 
@@ -24,7 +24,7 @@ export default function LoggedUserInfo({user, onLogout}: LoggedUserInfo) {
                     icon={<AvatarIcon />} />
                 </div>
                 <div>
-                    <span className="text-xs italic">{user.displayName}</span>
+                    <span className="text-xs italic">{user.prenom+" "+user.nom}</span>
                 </div>
             </div>
         </PopoverTrigger>

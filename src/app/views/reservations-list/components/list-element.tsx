@@ -14,8 +14,8 @@ interface ListElementProps {
     nomParking: string,
     adresseParking: string,
     statut: string,
-    handleReservationClicked: (resId: string) => void
-    onCancelClick: (resId: string) => void
+    handleReservationClicked: (idReservation: string) => void
+    onCancelClick: (idReservation: string) => void
 }
 const ListElement = ({ idReservation, dateDebut, dateFin, typeVoiture, nomParking, adresseParking, statut, handleReservationClicked, onCancelClick }: ListElementProps) => {
 
