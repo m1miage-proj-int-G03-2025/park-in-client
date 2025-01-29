@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - develop
+      - deploiement-express
 #   pull_request:
 #     branches:
 #       - develop
