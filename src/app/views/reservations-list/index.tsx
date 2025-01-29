@@ -26,40 +26,36 @@ const ReservationsListView = () => {
 
     const router = useRouter();
     const { setIsLoading } = useLoading();
-    const { userId, isInitialized } = useUserContext();
+    const { userInfo } = useUserContext();
 
-    const handleReservationClick = (id: string) => {
-        router.push(`/reservations/${id}`);
+    const handleReservationClick = (idReservation: string) => {
+        router.push(`/reservations/${idReservation}`);
     };
 
     const fetchReservations = async () => {
-        if (userId) {
-            setIsLoading(true);
-            try {
-                const response = await getUserReservations(userId);
-                setReservations(
-                    response
-                        .map((res) => ({
-                            ...res,
-                            dateDebut: new Date(res.heureDebut),
-                            dateFin: new Date(res.heureFin),
-                            typeVoiture: getTypeVoitureByKey(res.typeDePlaceEnum),
-                        }))
-                        .sort((a, b) => b.dateDebut.getTime() - a.dateFin.getTime())
-                );
-            } catch (error) {
-                console.error("Error fetching reservations:", error);
-            } finally {
-                setIsLoading(false);
-            }
-        } else {
-            router.push("/login");
+        setIsLoading(true);
+        try {
+            const response = await getUserReservations(userInfo!.idUtilisateur);
+            setReservations(
+                response
+                    .map((res) => ({
+                        ...res,
+                        dateDebut: new Date(res.heureDebut),
+                        dateFin: new Date(res.heureFin),
+                        typeVoiture: getTypeVoitureByKey(res.typeDePlaceEnum),
+                    }))
+                    .sort((a, b) => b.dateDebut.getTime() - a.dateFin.getTime())
+            );
+        } catch (error) {
+            console.error("Error fetching reservations:", error);
+        } finally {
+            setIsLoading(false);
         }
     };
 
-    const handleCancelReservation = async (id: string) => {
+    const handleCancelReservation = async (idReservation: string) => {
         setIsLoading(true);
-        await cancelReservation(id)
+        await cancelReservation(idReservation)
             .then(() => {
                 fetchReservations();
             })
@@ -69,10 +65,12 @@ const ReservationsListView = () => {
     };
 
     useEffect(() => {
-        if (isInitialized) {
+        if (userInfo) {
             fetchReservations();
+            return;
         }
-    }, [isInitialized]);
+        router.push("/login");
+    }, [userInfo]);
 
     const indexOfLastReservation = currentPage * reservationsPerPage;
     const indexOfFirstReservation = indexOfLastReservation - reservationsPerPage;

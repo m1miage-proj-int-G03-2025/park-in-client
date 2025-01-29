@@ -32,26 +32,26 @@ export default function ReservationView() {
 
     const [details, setDetails] = useState<ReservationDetails | null>(null);
     const { reservationId } = useParams();
-    const { setIsLoading } = useLoading()
+    const { setIsLoading } = useLoading();    
 
     const fetchDetailsReservation = async () => {
-        setIsLoading(true)
+        setIsLoading(true);
         if (reservationId) {
-            await getReservationDetails(parseInt(reservationId as string)).then(({ data }) => {
-                setDetails(data)
+            await getReservationDetails(reservationId as string).then(({ data }) => {
+                setDetails(data);
             }).finally(() => {
-                setIsLoading(false)
+                setIsLoading(false);
             })
         }
     }
 
     const handleCancelReservation = async () => {
         if (!reservationId) return;
-        setIsLoading(true)
-        await cancelReservation(parseInt(reservationId as string)).then(() => {
-            fetchDetailsReservation()
+        setIsLoading(true);
+        await cancelReservation(reservationId as string).then(() => {
+            fetchDetailsReservation();
         }).finally(() => {
-            setIsLoading(false)
+            setIsLoading(false);
         })
     }
 

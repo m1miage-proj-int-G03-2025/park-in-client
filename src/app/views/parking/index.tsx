@@ -12,11 +12,14 @@ import { useParams, useSearchParams } from "next/navigation";
 import { useRouter } from "next/navigation";
 import { Accordion, AccordionItem, Skeleton } from "@heroui/react";
 import { getParkingDetails, getPlacesDisponibles, reservePlace } from "@/common/services/parkingsService";
-import { useLoading } from "@/common/contexts/loadingContext";
 import { getTypeVoitureByKey } from "@/common/utils/enum-key-helper";
 import dynamic from "next/dynamic";
 import { useUserContext } from "@/common/providers/UserProvider";
 import { MdCalendarToday, MdSchedule, MdStairs } from "react-icons/md";
+import { CreateReservationParams } from "@/common/types/create-reservation-params";
+import { useError } from "@/common/contexts/errorContext";
+import { useReservationData } from "@/common/providers/ReservationDataProvider";
+import { ErrorMessages } from "@/common/utils/error-messages-helper";
 
 const LeafletMap = dynamic(() => import('@/common/components/LeafletMap'), {
   ssr: false,
@@ -27,8 +30,10 @@ const ParkingView = () => {
   const { parkingId } = useParams() as { parkingId: string };
   const searchParams = useSearchParams();
   const router = useRouter();
-  const { setIsLoading } = useLoading()
-  const {userId, isInitialized} = useUserContext()
+  const [isLoading, setIsLoading] = useState(false);
+  const { userInfo } = useUserContext();
+  const { reservationData, saveReservationData } = useReservationData();
+  const { showErrorMessage } = useError();
 
   const [parkingDetails, setParkingDetails] = useState({
     nom: "",
@@ -84,24 +89,6 @@ const ParkingView = () => {
     );
   }
 
-  const handleReserve =  async() => {
-    if (!userId) {
-      throw new Error("User ID is null");
-    }
-    const data = {
-      numeroPlace: selectedPlace.numeroPlace,
-      idUtilisateur: userId,
-      dateDebut: reservationInfo.date,
-      duree: reservationInfo.duree,
-      idParking: parkingId,
-      typePlace: selectedPlace.typePlace,
-    }
-    setIsLoading(true)
-    const reservation = await reservePlace(data)
-    setIsLoading(false)
-    router.push(`/reservations/${reservation[0].id}`)
-  }
-
   const handleSelect = (key: keyof typeof selectedPlace, value: string) => {
     if (selectedPlace[key] === value) {
       setSelectedPlace((prev) => ({
@@ -121,26 +108,51 @@ const ParkingView = () => {
     setIsModalOpen(true);
   }
 
-  const handleConfirmReservation = () => {
-    setIsModalOpen(false);
-    while(!isInitialized) {
-    setIsLoading(true)
+  const handleReservation = async (data: CreateReservationParams) => {
+    try {
+      setIsLoading(true);
+      const reservation = (await reservePlace(data)).at(0);
+      setIsLoading(false);
+      saveReservationData(null);
+
+      router.push(`/reservations/${reservation?.id}`);
+    } catch (error) {
+      console.error(error);
+      showErrorMessage(ErrorMessages.RESERVATION_ERROR);
     }
-    if (userId) {
-      if(selectedPlace?.typePlace) {
-        handleReserve()
-      }
-    } else {
-      const queryString = encodeURIComponent(JSON.stringify({
-        idPlace: selectedPlace?.numeroPlace,
-        date: reservationInfo?.date,
+  }
+
+  const handleConfirmReservation = async () => {
+    setIsModalOpen(false);
+    if (userInfo) {
+      await handleReservation({
+        idUtilisateur: userInfo.idUtilisateur,
+        numeroPlace: selectedPlace?.numeroPlace,
+        dateDebut: reservationInfo?.date,
         duree: reservationInfo?.duree,
         typePlace: selectedPlace?.typePlace,
         idParking: parkingId,
-      }));
-      router.push(`/login?searchQuery=${queryString}`);
+      });
+      return;
     }
+
+    saveReservationData({
+      numeroPlace: selectedPlace?.numeroPlace,
+      dateDebut: reservationInfo?.date,
+      duree: reservationInfo?.duree,
+      typePlace: selectedPlace?.typePlace,
+      idParking: parkingId,
+    });
+    router.push("/login");
   }
+
+  useEffect(() => {
+    if (userInfo && reservationData) {
+      const data = { ...reservationData };
+      data.idUtilisateur = userInfo.idUtilisateur;
+      handleReservation(data).then(() => null);
+    }
+  }, [userInfo, reservationData]);
 
   const handleReservationInfoChange = (key: string, value: string | Date) => {
     setReservationInfo((prev: typeof reservationInfo) => ({
@@ -254,41 +266,41 @@ const ParkingView = () => {
   }, [parkingId, parkingDetails, tarifTot, reservationInfo, selectedPlace])
 
   useEffect(() => {
-    setIsLoading(true)
+    setIsLoading(true);
     fetchParkingDetails();
     if (selectedPlace?.typePlace) {
       fetchPlacesDisponibles();
     }
-      setIsLoading(false)
+    setIsLoading(false)
   }, [parkingId]);
 
 
 
   return (
-      <div className="pt-20 min-h-screen" suppressHydrationWarning>
-        <div
-          className="pt-10 pb-24 overflow-y-auto"
-          style={{
-            height: "calc(100vh - 80px)",
-          }}
-        >
-          <ReservationDetailsModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} reservationDetails={reservationDetails} onConfirm={handleConfirmReservation} />
-          <div className="p-6">
-            <div className="flex flex-row justify-between">
-              <div className="flex-col">
-                <label className="text-left text-3xl font-bold text-black mb-6 bloc">
-                  {parkingDetails.nom}
-                </label>
-                <div className="flex flex-row items-center gap-20 mt-10 mb-10">
-                  {infoFields?.map((field, index) => {
-                    return <InfoField key={index} {...field} iconName={field.iconName || undefined} />
-                  })}
-                </div>
-                {preSelectedFields && <div className="mb-10 flex flex-row pl-0 gap-4">
-                  {preSelectedFields.map((field, index) => {
-                    return (
-                      <div className="flex-1" key={index}>
-                        <InputField
+    <div className="pt-20 min-h-screen" suppressHydrationWarning>
+      <div
+        className="pt-10 pb-24 overflow-y-auto"
+        style={{
+          height: "calc(100vh - 80px)",
+        }}
+      >
+        <ReservationDetailsModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} reservationDetails={reservationDetails} onConfirm={handleConfirmReservation} />
+        <div className="p-6">
+          <div className="flex flex-row justify-between">
+            <div className="flex-col">
+              <label className="text-left text-3xl font-bold text-black mb-6 bloc">
+                {parkingDetails.nom}
+              </label>
+              <div className="flex flex-row items-center gap-20 mt-10 mb-10">
+                {infoFields?.map((field, index) => {
+                  return <InfoField key={index} {...field} iconName={field.iconName || undefined} />
+                })}
+              </div>
+              {preSelectedFields && <div className="mb-10 flex flex-row pl-0 gap-4">
+                {preSelectedFields.map((field, index) => {
+                  return (
+                    <div className="flex-1" key={index}>
+                      <InputField
                         label={field.label}
                         placeholder={field.placeholder}
                         disabled={field.disabled}
@@ -299,85 +311,86 @@ const ParkingView = () => {
                         iconColor={field.iconColor}
                         options={field.options}
                         onChange={field.onChange}
-                        />
-                      </div>
-                    );
-                  })}
-                </div>}
-              </div>
-              <div
-                className="top-0 right-0 rounded-lg shadow-xl m-4 w-[800px] h-[300px]" >
-                {mapComponent}
-              </div>
+                      />
+                    </div>
+                  );
+                })}
+              </div>}
             </div>
+            <div
+              className="top-0 right-0 rounded-lg shadow-xl m-4 w-[800px] h-[300px]" >
+              {mapComponent}
+            </div>
+          </div>
 
-            <div className="flex items-start">
-              <div className="flex flex-col w-full">
-                <label className="text-xl font-semibold text-primary mb-3 pl-2">
-                  Choisissez type de place
+          <div className="flex items-start">
+            <div className="flex flex-col w-full">
+              <label className="text-xl font-semibold text-primary mb-3 pl-2">
+                Choisissez type de place
+              </label>
+              <TypePlaceSelector
+                selectedTypePlace={selectedPlace?.typePlace}
+                onSelectTypePlace={(typePlace) =>
+                  handleSelect("typePlace", typePlace)
+                }
+              />
+              <div className="flex flex-row items-center justify-between">
+                <label className="text-xl font-semibold text-primary">
+                  Choisissez Une Place
                 </label>
-                <TypePlaceSelector
-                  selectedTypePlace={selectedPlace?.typePlace}
-                  onSelectTypePlace={(typePlace) =>
-                    handleSelect("typePlace", typePlace)
-                  }
-                />
-                <div className="flex flex-row items-center justify-between">
-                  <label className="text-xl font-semibold text-primary">
-                    Choisissez Une Place
-                  </label>
-                  <div className="relative w-1/6 pr-20 mb-10">
-                    <InputField
-                      inputType="select"
-                      label=""
-                      placeholder="Bloc"
-                      value={selectedBloc.toString()}
-                      options={blocOptions}
-                      onChange={(value: string | Date) =>
-                        setSelectedBloc(parseInt(value as string))
-                      }
-                    />
-                  </div>
+                <div className="relative w-1/6 pr-20 mb-10">
+                  <InputField
+                    inputType="select"
+                    label=""
+                    placeholder="Bloc"
+                    value={selectedBloc.toString()}
+                    options={blocOptions}
+                    onChange={(value: string | Date) =>
+                      setSelectedBloc(parseInt(value as string))
+                    }
+                  />
                 </div>
-                <Accordion showDivider={false}>
-                  {
-                    etageOptions?.map((etage) => {
-                      return (<AccordionItem key={etage.value} aria-label={etage.label} title={etage.label}
-                        startContent={<MdStairs color={colors.main} size={30} />}
-                        classNames={{
-                          title: "bg-transparent text-slate-500 font-semibold",
-                          base: "bg-transparent",
-                          content: "bg-transparent",
-                          heading: 'bg-white rounded-2xl px-14 shadow-lg m-4'
-                        }} >
-                        <PlaceSelector
-                          places={placesAvailable.filter((place) => place.etage === parseInt(etage.value))}
-                          selectedPlace={selectedPlace?.numeroPlace}
-                          selectedTypePlace={selectedPlace?.typePlace}
-                          onSelectPlace={(numPlace) => {
-                            handleSelect("numeroPlace", numPlace);
-                          }}
-                        />
-
-                      </AccordionItem>)
-                    })
-
-                  }
-                </Accordion>
               </div>
+              <Accordion showDivider={false}>
+                {
+                  etageOptions?.map((etage) => {
+                    return (<AccordionItem key={etage.value} aria-label={etage.label} title={etage.label}
+                      startContent={<MdStairs color={colors.main} size={30} />}
+                      classNames={{
+                        title: "bg-transparent text-slate-500 font-semibold",
+                        base: "bg-transparent",
+                        content: "bg-transparent",
+                        heading: 'bg-white rounded-2xl px-14 shadow-lg m-4'
+                      }} >
+                      <PlaceSelector
+                        places={placesAvailable.filter((place) => place.etage === parseInt(etage.value))}
+                        selectedPlace={selectedPlace?.numeroPlace}
+                        selectedTypePlace={selectedPlace?.typePlace}
+                        onSelectPlace={(numPlace) => {
+                          handleSelect("numeroPlace", numPlace);
+                        }}
+                      />
+
+                    </AccordionItem>)
+                  })
+
+                }
+              </Accordion>
             </div>
           </div>
         </div>
-
-        {reservationInfo && (
-          <div className="fixed bottom-0 left-0 w-full z-50">
-            <TotalPriceBar
-              prixTotal={tarifTot}
-              onClick={handleReservationClick}
-            />
-          </div>
-        )}
       </div>
+
+      {reservationInfo && (
+        <div className="fixed bottom-0 left-0 w-full z-50">
+          <TotalPriceBar
+            prixTotal={tarifTot}
+            onClick={handleReservationClick}
+            isLoading={isLoading}
+          />
+        </div>
+      )}
+    </div>
   );
 }
 
