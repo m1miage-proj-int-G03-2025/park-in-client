@@ -6,6 +6,7 @@ import { createUserWithEmailAndPassword } from "firebase/auth";
 import { ChangeEvent, useState } from "react";
 import { SignUpProps } from "./SignUpWithGoogle";
 import { FaRegEye, FaRegEyeSlash } from "react-icons/fa6";
+import { ErrorMessages } from "@/common/utils/error-messages-helper";
 
 export function SignUpWithEmailAndPassword({onSignUp}: SignUpProps) {
     const [isPasswordVisible, setIsPasswordVisible] = useState(false);
