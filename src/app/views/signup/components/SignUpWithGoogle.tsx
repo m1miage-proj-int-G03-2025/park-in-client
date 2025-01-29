@@ -6,6 +6,7 @@ import { auth } from "@/common/configs/firebaseConfig";
 import { GoogleAuthProvider, signInWithPopup } from "firebase/auth";
 import { CreateUserParams } from "@/common/types/create-user-params";
 import { useError } from "@/common/contexts/errorContext";
+import { ErrorMessages } from "@/common/utils/error-messages-helper";
 
 
 export interface SignUpProps {
