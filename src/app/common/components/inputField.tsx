@@ -107,7 +107,7 @@ const InputField = (props: InputFieldProps) => {
             <DateTimePicker
               minDate={dayjs(new Date())}
               value={dayjs(value as Date)}
-              className="bg-white rounded-lg shadow-xl overflow-hidden"
+              className="bg-white rounded-lg shadow-lg overflow-hidden"
               disablePast={true}
               sx={{
                 "& .MuiOutlinedInput-root": {
