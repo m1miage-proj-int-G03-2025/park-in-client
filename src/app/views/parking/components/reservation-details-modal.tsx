@@ -24,6 +24,7 @@ interface ReservationDetailsModalProps {
 
 const ReservationDetailsModal = (props: ReservationDetailsModalProps) => {
     const { isOpen, onClose, reservationDetails, onConfirm } = props;
+    console.log(reservationDetails)
     const infoFields = useMemo(() => {
         return [
             {label: "Nom du parking", text: reservationDetails.parkingName},
