@@ -11,7 +11,7 @@ import { useUserContext } from "@/common/providers/UserProvider";
 const navs = [
     {name: "Accueil", link: "/", requiresLogin: false}, 
     {name: "Mes réservations", link: "/reservations", requiresLogin: true}, 
-    {name: "Abonnement", link: "/abonnement", requiresLogin: false},
+    
 ]
 
 export default function NavBar() {
