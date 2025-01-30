@@ -127,8 +127,12 @@ const ParkingView = () => {
       setIsLoading(false);
       setGlobalLoading(false);
       saveReservationData(null);
+      if(reservation) {
+        router.push(`/reservations/${reservation?.id}`);
+      } else {
+        showErrorMessage(ErrorMessages.RESERVATION_ERROR);
+      }
 
-      router.push(`/reservations/${reservation?.id}`);
     } catch (error) {
       setIsLoading(false);
       console.error(error);
