@@ -106,7 +106,18 @@ const ParkingView = () => {
   };
 
   const handleReservationClick = () => {
-    setIsModalOpen(true);
+    if(userInfo) {
+      setIsModalOpen(true);
+    } else {
+      saveReservationData({
+        numeroPlace: selectedPlace?.numeroPlace,
+        dateDebut: reservationInfo?.date,
+        duree: reservationInfo?.duree,
+        typePlace: selectedPlace?.typePlace,
+        idParking: parkingId,
+      });
+      router.push("/login");
+    }
   }
 
   const handleReservation = async (data: CreateReservationParams) => {
@@ -151,10 +162,9 @@ const ParkingView = () => {
 
   useEffect(() => {
     if (userInfo && reservationData) {
-      setGlobalLoading(true);
       const data = { ...reservationData };
       data.idUtilisateur = userInfo.idUtilisateur;
-      handleReservation(data).then(() => null);
+      setIsModalOpen(true);
     }
   }, [userInfo, reservationData]);
 
@@ -217,7 +227,7 @@ const ParkingView = () => {
     ).map((bloc) => ({
       label: `Bloc ${bloc}`,
       value: bloc.toString()
-    }));
+    })).sort((a, b) => parseInt(a.value, 10) - parseInt(b.value, 10));
 
   }, [placesDisponibles])
 
@@ -227,7 +237,7 @@ const ParkingView = () => {
     ).map((etage) => ({
       label: `Etage ${etage}`,
       value: etage.toString()
-    }));
+    })).sort((a, b) => parseInt(a.value, 10) - parseInt(b.value, 10));
 
   }, [placesDisponibles])
 
@@ -358,8 +368,11 @@ const ParkingView = () => {
               <Accordion showDivider={false}>
                 {
                   etageOptions?.map((etage) => {
+                    const availablePlaces = placesAvailable.filter((place) => place.etage == parseInt(etage.value) && place.typePlace == selectedPlace.typePlace)
+        
                     return (<AccordionItem key={etage.value} aria-label={etage.label} title={etage.label}
                       startContent={<MdStairs color={colors.main} size={30} />}
+                      isDisabled={availablePlaces.length === 0} 
                       classNames={{
                         title: "bg-transparent text-slate-500 font-semibold",
                         base: "bg-transparent",

@@ -27,11 +27,11 @@ const PlaceSelector = (props: PlaceSelectorProps) => {
             Aille {aille}
           </div>
           <div className="flex flex-wrap gap-4">
-            {places.map((place, index) => {
+            {places.sort((a, b) => Number(a.label) - Number(b.label)).map((place, index) => {
               const isDisabled = selectedTypePlace !== place.typePlace;
               const isSelected = place.numeroPlace === selectedPlace;
               return (
-                <SelectorCard 
+          !isDisabled &&  <SelectorCard 
                   isDisabled={isDisabled}
                   isSelected={isSelected}
                   key={index}
