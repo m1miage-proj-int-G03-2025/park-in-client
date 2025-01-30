@@ -26,6 +26,7 @@ interface ReservationDetails {
     adresseParking: string;
     typePlace: string;
     numeroPlace: string;
+    isAnnulable?: boolean
 }
 
 export default function ReservationView() {
@@ -38,7 +39,9 @@ export default function ReservationView() {
         setIsLoading(true);
         if (reservationId) {
             await getReservationDetails(reservationId as string).then(({ data }) => {
-                setDetails(data);
+                setDetails({...data,
+                    isAnnulable: dayjs(data.dateDebut).diff(dayjs(), 'hour') > 48
+            });
             }).finally(() => {
                 setIsLoading(false);
             })
@@ -142,9 +145,9 @@ export default function ReservationView() {
                             <div className="flex flex-col justify-center items-center">
                                 <div className="text-2xl text-[#449A1D] mb-4">Reservation confirmée</div>
                                 <FiCheckCircle size={100} color="#449A1D" />
-                                <div className="text-slate-500 text-2xl mt-8">
-                                    <Button className="bg-[#FF0000] px-3 py-2 rounded-full text-xl font-semibold text-white" onPress={handleCancelReservation}>Annuler</Button>
-                                </div>
+{ details.isAnnulable && details.statut == 'PLANIFIEE' &&  <div className="text-slate-500 text-2xl mt-8">
+                                  <Button className="bg-[#FF0000] px-3 py-2 rounded-full text-xl font-semibold text-white" onPress={handleCancelReservation}>Annuler</Button>
+                                </div>}
                             </div>
                         )
                     }
