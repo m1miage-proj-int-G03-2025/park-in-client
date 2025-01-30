@@ -87,11 +87,11 @@ export default function ReservationView() {
                     <div className="flex flex-col w-full bg-white shadow-lg rounded-3xl py-6 pl-6 pr-12">
                         <div className="flex mb-8">
                             <div className="flex flex-col w-2/3 px-6">
-                                <div className="flex mb-8 justify-between">
+                                {/* <div className="flex mb-8 justify-between">
                                     <DetailsInfo title="ID de reservation" value={details.idReservation} className="w-44" />
-                                    <DetailsInfo title="Type de place" value={getTypeVoitureByKey(details.typePlace)} className="w-44" />
-                                </div>
+                                </div> */}
                                 <div className="flex mb-8 justify-between">
+                                    <DetailsInfo title="Type de place" value={getTypeVoitureByKey(details.typePlace)} className="w-44" />
                                     <DetailsInfo title="Paiement" value={details.tarif} currency="&euro;" className="w-44" />
                                     <DetailsInfo title="Statut" value={getReservationStatusIcon(details.statut).label} className="w-44" />
                                 </div>

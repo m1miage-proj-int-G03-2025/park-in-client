@@ -20,6 +20,7 @@ import { CreateReservationParams } from "@/common/types/create-reservation-param
 import { useError } from "@/common/contexts/errorContext";
 import { useReservationData } from "@/common/providers/ReservationDataProvider";
 import { ErrorMessages } from "@/common/utils/error-messages-helper";
+import { useLoading } from "@/common/contexts/loadingContext";
 
 const LeafletMap = dynamic(() => import('@/common/components/LeafletMap'), {
   ssr: false,
@@ -34,6 +35,7 @@ const ParkingView = () => {
   const { userInfo } = useUserContext();
   const { reservationData, saveReservationData } = useReservationData();
   const { showErrorMessage } = useError();
+  const { setIsLoading: setGlobalLoading } = useLoading();
 
   const [parkingDetails, setParkingDetails] = useState({
     nom: "",
@@ -90,7 +92,7 @@ const ParkingView = () => {
   }
 
   const handleSelect = (key: keyof typeof selectedPlace, value: string) => {
-    if (selectedPlace[key] === value) {
+        if (selectedPlace[key] === value) {
       setSelectedPlace((prev) => ({
         ...prev,
         numeroPlace: "",
@@ -100,7 +102,6 @@ const ParkingView = () => {
         ...prev,
         [key]: value,
       }));
-
     }
   };
 
@@ -113,10 +114,12 @@ const ParkingView = () => {
       setIsLoading(true);
       const reservation = (await reservePlace(data)).at(0);
       setIsLoading(false);
+      setGlobalLoading(false);
       saveReservationData(null);
 
       router.push(`/reservations/${reservation?.id}`);
     } catch (error) {
+      setIsLoading(false);
       console.error(error);
       showErrorMessage(ErrorMessages.RESERVATION_ERROR);
     }
@@ -148,6 +151,7 @@ const ParkingView = () => {
 
   useEffect(() => {
     if (userInfo && reservationData) {
+      setGlobalLoading(true);
       const data = { ...reservationData };
       data.idUtilisateur = userInfo.idUtilisateur;
       handleReservation(data).then(() => null);
