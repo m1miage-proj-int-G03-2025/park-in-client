@@ -24,6 +24,7 @@ interface ReservationDetailsModalProps {
 
 const ReservationDetailsModal = (props: ReservationDetailsModalProps) => {
     const { isOpen, onClose, reservationDetails, onConfirm } = props;
+
     const formatter = new Intl.DateTimeFormat("fr-FR", {
       timeZone: "Europe/Paris",
       year: "numeric",
@@ -33,6 +34,7 @@ const ReservationDetailsModal = (props: ReservationDetailsModalProps) => {
       minute: "2-digit",
       second: "2-digit",
     });
+
     const infoFields = useMemo(() => {
         return [
             {label: "Nom du parking", text: reservationDetails.parkingName},
