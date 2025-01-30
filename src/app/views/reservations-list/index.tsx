@@ -17,6 +17,7 @@ interface Reservation {
     nomParking: string;
     adresseParking: string;
     statut: string;
+    isAnnulable?: boolean;
 }
 
 const ReservationsListView = () => {
@@ -38,13 +39,20 @@ const ReservationsListView = () => {
             const response = await getUserReservations(userInfo!.idUtilisateur);
             setReservations(
                 response
-                    .map((res) => ({
-                        ...res,
-                        dateDebut: new Date(res.heureDebut),
-                        dateFin: new Date(res.heureFin),
-                        typeVoiture: getTypeVoitureByKey(res.typeDePlaceEnum),
-                    }))
-                    .sort((a, b) => b.dateDebut.getTime() - a.dateFin.getTime())
+                    .map((res) => {
+                        const dateDebut = new Date(res.heureDebut);
+                        const dateFin = new Date(res.heureFin);
+                        const now = new Date();
+                        const isAnnulable = (dateDebut.getTime() - now.getTime()) > 48 * 60 * 60 * 1000; 
+            
+                        return {
+                            ...res,
+                            dateDebut,
+                            dateFin,
+                            typeVoiture: getTypeVoitureByKey(res.typeDePlaceEnum),
+                            isAnnulable, 
+                        };
+                    }).sort((a, b) => b.dateDebut.getTime() - a.dateFin.getTime())
             );
         } catch (error) {
             console.error("Error fetching reservations:", error);

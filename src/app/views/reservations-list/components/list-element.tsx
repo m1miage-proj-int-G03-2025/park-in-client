@@ -14,10 +14,11 @@ interface ListElementProps {
     nomParking: string,
     adresseParking: string,
     statut: string,
+    isAnnulable?: boolean,
     handleReservationClicked: (idReservation: string) => void
     onCancelClick: (idReservation: string) => void
 }
-const ListElement = ({ idReservation, dateDebut, dateFin, typeVoiture, nomParking, adresseParking, statut, handleReservationClicked, onCancelClick }: ListElementProps) => {
+const ListElement = ({ idReservation, dateDebut, dateFin, typeVoiture, nomParking, adresseParking, statut, isAnnulable, handleReservationClicked, onCancelClick }: ListElementProps) => {
 
     const formatDate = (date: Date) => {
         return new Intl.DateTimeFormat('fr-FR', {
@@ -72,7 +73,7 @@ const ListElement = ({ idReservation, dateDebut, dateFin, typeVoiture, nomParkin
                 <div className="mb-3 flex">
                     {getPlaceType(typeVoiture)}
                 </div>
-                {statut === 'PLANIFIEE' && <Button  onPress={() => onCancelClick(idReservation)}className="py-2 px-4 2xl:px-8 mx-2 2xl:mx-9 rounded-full text-sm text-white font-semibold bg-error">Annuler</Button>}
+                {isAnnulable && statut == 'PLANIFIEE' && <Button  onPress={() => onCancelClick(idReservation)}className="py-2 px-4 2xl:px-8 mx-2 2xl:mx-9 rounded-full text-sm text-white font-semibold bg-error">Annuler</Button>}
             </div>
             <div>
             </div>
