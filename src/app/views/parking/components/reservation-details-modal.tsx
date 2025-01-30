@@ -24,12 +24,20 @@ interface ReservationDetailsModalProps {
 
 const ReservationDetailsModal = (props: ReservationDetailsModalProps) => {
     const { isOpen, onClose, reservationDetails, onConfirm } = props;
-    console.log(reservationDetails)
+    const formatter = new Intl.DateTimeFormat("fr-FR", {
+      timeZone: "Europe/Paris",
+      year: "numeric",
+      month: "2-digit",
+      day: "2-digit",
+      hour: "2-digit",
+      minute: "2-digit",
+      second: "2-digit",
+    });
     const infoFields = useMemo(() => {
         return [
             {label: "Nom du parking", text: reservationDetails.parkingName},
             {label: "Adresse", text: reservationDetails.parkingAddress},
-            {label: "Date de début", text: reservationDetails.startDate.toLocaleString()},
+            {label: "Date de début", text: formatter.format(new Date(reservationDetails.startDate))},
             {label: "Durée", text: timeOpts.find((opt) => opt.value == reservationDetails.duration)?.label || ""},
             {label: "Type de place", text: reservationDetails.TypePlace},
             {label: reservationDetails.numeroPlace && "Numero de place", text: reservationDetails.numeroPlace || ""},
