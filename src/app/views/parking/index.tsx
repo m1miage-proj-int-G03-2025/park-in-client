@@ -160,14 +160,6 @@ const ParkingView = () => {
     router.push("/login");
   }
 
-  useEffect(() => {
-    if (userInfo && reservationData) {
-      const data = { ...reservationData };
-      data.idUtilisateur = userInfo.idUtilisateur;
-      setIsModalOpen(true);
-    }
-  }, [userInfo, reservationData]);
-
   const handleReservationInfoChange = (key: string, value: string | Date) => {
     setReservationInfo((prev: typeof reservationInfo) => ({
       ...prev,
@@ -279,6 +271,10 @@ const ParkingView = () => {
     }
   }, [parkingId, parkingDetails, tarifTot, reservationInfo, selectedPlace])
 
+ const reservationDetailModal = useMemo(() => {
+  return reservationDetails && <ReservationDetailsModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} reservationDetails={reservationDetails} onConfirm={handleConfirmReservation} />
+ }, [reservationDetails, isModalOpen])
+
   useEffect(() => {
     setIsLoading(true);
     fetchParkingDetails();
@@ -287,6 +283,20 @@ const ParkingView = () => {
     }
     setIsLoading(false)
   }, [parkingId]);
+
+  useEffect(() => {
+    if (userInfo && reservationData) {
+      const data = { ...reservationData };
+      data.idUtilisateur = userInfo.idUtilisateur;
+       setSelectedPlace((prev) => ({
+        ...prev,
+        numeroPlace: data.numeroPlace,
+       }))
+      
+      setIsModalOpen(true);
+    }
+  }, [userInfo, reservationData]);
+
 
   useEffect(() => {
     setSelectedBloc(parseInt(blocOptions[0]?.value));
@@ -302,7 +312,8 @@ const ParkingView = () => {
           height: "calc(100vh - 80px)",
         }}
       >
-        <ReservationDetailsModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} reservationDetails={reservationDetails} onConfirm={handleConfirmReservation} />
+        {reservationDetailModal}
+
         <div className="p-6">
           <div className="flex flex-row justify-between">
             <div className="flex-col">
