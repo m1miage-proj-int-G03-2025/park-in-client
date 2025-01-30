@@ -56,7 +56,7 @@ const ParkingView = () => {
     typePlace: reservationInfo?.typeVoiture,
     numeroPlace: "",
   });
-  const [selectedBloc, setSelectedBloc] = useState(1);
+  const [selectedBloc, setSelectedBloc] = useState<number | undefined>(undefined);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   const fetchParkingDetails = async () => {
@@ -288,6 +288,10 @@ const ParkingView = () => {
     setIsLoading(false)
   }, [parkingId]);
 
+  useEffect(() => {
+    setSelectedBloc(parseInt(blocOptions[0]?.value));
+  }, [blocOptions, placesDisponibles])
+
 
 
   return (
@@ -353,16 +357,16 @@ const ParkingView = () => {
                   Choisissez Une Place
                 </label>
                 <div className="relative w-1/6 pr-20 mb-10">
-                  <InputField
+{  selectedBloc? <InputField
                     inputType="select"
                     label=""
                     placeholder="Bloc"
-                    value={selectedBloc.toString()}
+                    value={selectedBloc?.toString() || ""}
                     options={blocOptions}
                     onChange={(value: string | Date) =>
                       setSelectedBloc(parseInt(value as string))
                     }
-                  />
+                  /> : <></>}
                 </div>
               </div>
               <Accordion showDivider={false}>
