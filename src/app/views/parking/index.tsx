@@ -217,7 +217,7 @@ const ParkingView = () => {
     ).map((bloc) => ({
       label: `Bloc ${bloc}`,
       value: bloc.toString()
-    }));
+    })).sort((a, b) => parseInt(a.value, 10) - parseInt(b.value, 10));
 
   }, [placesDisponibles])
 
@@ -227,7 +227,7 @@ const ParkingView = () => {
     ).map((etage) => ({
       label: `Etage ${etage}`,
       value: etage.toString()
-    }));
+    })).sort((a, b) => parseInt(a.value, 10) - parseInt(b.value, 10));
 
   }, [placesDisponibles])
 
@@ -360,6 +360,7 @@ const ParkingView = () => {
                   etageOptions?.map((etage) => {
                     return (<AccordionItem key={etage.value} aria-label={etage.label} title={etage.label}
                       startContent={<MdStairs color={colors.main} size={30} />}
+                      isDisabled={placesAvailable.filter((place) => place.etage == parseInt(etage.value) && place.typePlace == selectedPlace.typePlace).length === 0} 
                       classNames={{
                         title: "bg-transparent text-slate-500 font-semibold",
                         base: "bg-transparent",
