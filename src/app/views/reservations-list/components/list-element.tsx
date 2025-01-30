@@ -22,6 +22,7 @@ const ListElement = ({ idReservation, dateDebut, dateFin, typeVoiture, nomParkin
 
     const formatDate = (date: Date) => {
         return new Intl.DateTimeFormat('fr-FR', {
+            timeZone: 'Europe/Paris',
             weekday: 'long',
             day: '2-digit',
             month: 'short',

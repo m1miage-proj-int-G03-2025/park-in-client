@@ -59,11 +59,11 @@ export default function ReservationView() {
     }
 
     const heureDebut = useMemo(() => {
-        return dayjs(details?.dateDebut).utc().format('HH[h]mm');
+        return dayjs(details?.dateDebut).tz('Europe/Paris').format('HH[h]mm');
     }, [details]);
 
     const heureFin = useMemo(() => {
-        return dayjs(details?.dateFin).utc().format('HH[h]mm');
+        return dayjs(details?.dateFin).tz('Europe/Paris').format('HH[h]mm');
     }, [details]);
 
     const [, , , bloc, etage, aile, numero] = useMemo(() => {
